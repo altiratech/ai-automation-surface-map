@@ -2,9 +2,13 @@ import { useState } from "react";
 
 import surfaceMap from "@surface-map";
 import annualSurfaceMap from "@surface-map-annual";
+import codeEthicsSurfaceMap from "@surface-map-code-ethics";
+import assistWorkbenchSlice from "@assist-workbench-slice";
 
 import type {
+  AssistLaneWorkbenchPayload,
   RecommendationMode,
+  ReviewerOutcome,
   SourceInventoryItem,
   StepResult,
   SurfaceMapPayload,
@@ -12,6 +16,9 @@ import type {
 
 const payload = surfaceMap as SurfaceMapPayload;
 const annualPayload = annualSurfaceMap as SurfaceMapPayload;
+const codeEthicsPayload = codeEthicsSurfaceMap as SurfaceMapPayload;
+const assistWorkbench = assistWorkbenchSlice as AssistLaneWorkbenchPayload;
+const portfolioPayloads = [payload, annualPayload, codeEthicsPayload];
 
 const modeMeta: Record<
   RecommendationMode,
@@ -36,6 +43,7 @@ const modeMeta: Record<
 
 const weakestStepId = payload.trust_summary.weakest_step.step_id;
 const annualWeakestStepId = annualPayload.trust_summary.weakest_step.step_id;
+const defaultWorkbenchPilotStepId = assistWorkbench.pilot_steps[0]?.step_id ?? "";
 
 function formatPercent(value: number): string {
   return `${Math.round(value * 100)}%`;
@@ -70,6 +78,20 @@ function workflowStatusLabel(item: SurfaceMapPayload): string {
   return item.trust_summary.read_only_ui_ready ? "Ready" : "Hold";
 }
 
+function workflowLaneLabel(item: SurfaceMapPayload): string {
+  if (item.workflow.workflow_id === payload.workflow.workflow_id) {
+    return "Detailed lane";
+  }
+  if (item.workflow.workflow_id === annualPayload.workflow.workflow_id) {
+    return "Compact lane";
+  }
+  return "Workbench lane";
+}
+
+function outcomeLabel(outcome: ReviewerOutcome): string {
+  return outcome.charAt(0).toUpperCase() + outcome.slice(1);
+}
+
 function stepNameForPayload(item: SurfaceMapPayload, stepId: string): string {
   return item.step_results.find((step) => step.step_id === stepId)?.step_name ?? stepId;
 }
@@ -89,12 +111,25 @@ function trustCompleteCountForPayload(item: SurfaceMapPayload): number {
 function App() {
   const [selectedStepId, setSelectedStepId] = useState(weakestStepId);
   const [selectedAnnualStepId, setSelectedAnnualStepId] = useState(annualWeakestStepId);
+  const [selectedWorkbenchStepId, setSelectedWorkbenchStepId] = useState(
+    defaultWorkbenchPilotStepId,
+  );
+  const [workbenchDrafts, setWorkbenchDrafts] = useState<Record<string, string>>({});
+  const [workbenchReasons, setWorkbenchReasons] = useState<Record<string, string>>({});
+  const [workbenchOutcomes, setWorkbenchOutcomes] = useState<
+    Partial<Record<string, ReviewerOutcome>>
+  >({});
   const selectedStep =
     payload.step_results.find((step) => step.step_id === selectedStepId) ??
     payload.step_results[0];
   const selectedAnnualStep =
     annualPayload.step_results.find((step) => step.step_id === selectedAnnualStepId) ??
     annualPayload.step_results[0];
+  const workbenchPayloadLookup: Record<string, SurfaceMapPayload> = {
+    [payload.workflow.workflow_id]: payload,
+    [annualPayload.workflow.workflow_id]: annualPayload,
+    [codeEthicsPayload.workflow.workflow_id]: codeEthicsPayload,
+  };
   const selectedQueueItem = payload.trust_summary.review_queue.find(
     (item) => item.step_id === selectedStep.step_id,
   );
@@ -107,6 +142,17 @@ function App() {
   const annualSourceLookup = Object.fromEntries(
     annualPayload.source_inventory.map((source) => [source.source_id, source]),
   ) as Record<string, SourceInventoryItem>;
+  const codeEthicsSourceLookup = Object.fromEntries(
+    codeEthicsPayload.source_inventory.map((source) => [source.source_id, source]),
+  ) as Record<string, SourceInventoryItem>;
+  const workbenchSourceLookupByWorkflow: Record<
+    string,
+    Record<string, SourceInventoryItem>
+  > = {
+    [payload.workflow.workflow_id]: sourceLookup,
+    [annualPayload.workflow.workflow_id]: annualSourceLookup,
+    [codeEthicsPayload.workflow.workflow_id]: codeEthicsSourceLookup,
+  };
   const isWeakestTrustStep = selectedStep.step_id === weakestStepId;
   const isLowestConfidenceStep =
     selectedStep.step_id === payload.summary.lowest_confidence_step.step_id;
@@ -135,32 +181,60 @@ function App() {
     annualPayload,
     annualPayload.trust_summary.weakest_step.step_id,
   );
+  const selectedWorkbenchPilot =
+    assistWorkbench.pilot_steps.find((step) => step.step_id === selectedWorkbenchStepId) ??
+    assistWorkbench.pilot_steps[0];
+  const selectedWorkbenchPayload =
+    workbenchPayloadLookup[selectedWorkbenchPilot.workflow_id] ?? payload;
+  const selectedWorkbenchStep =
+    selectedWorkbenchPayload.step_results.find(
+      (step) => step.step_id === selectedWorkbenchPilot.step_id,
+    ) ?? selectedWorkbenchPayload.step_results[0];
+  const selectedWorkbenchSourceLookup =
+    workbenchSourceLookupByWorkflow[selectedWorkbenchPilot.workflow_id] ?? sourceLookup;
+  const relatedAssistSteps = assistWorkbench.supporting_steps.filter(
+    (step) => step.workflow_id === selectedWorkbenchPilot.workflow_id,
+  );
+  const workbenchDraft =
+    workbenchDrafts[selectedWorkbenchStep.step_id] ??
+    [
+      selectedWorkbenchStep.review.decision_rationale.why_this_mode,
+      selectedWorkbenchStep.review.review_actions[0],
+      selectedWorkbenchStep.build_implication,
+    ]
+      .filter((value): value is string => Boolean(value))
+      .join("\n\n");
+  const workbenchReason = workbenchReasons[selectedWorkbenchStep.step_id] ?? "";
+  const workbenchOutcome = workbenchOutcomes[selectedWorkbenchStep.step_id];
+  const workbenchNeedsExplicitConfirmation =
+    assistWorkbench.reviewer_confirmation_pattern.steps_requiring_explicit_confirmation.some(
+      (step) =>
+        step.workflow_id === selectedWorkbenchPilot.workflow_id &&
+        step.step_id === selectedWorkbenchStep.step_id,
+    );
+  const nextHumanGate = selectedWorkbenchPayload.summary.hard_guardrail_step;
 
   return (
     <div className="page-shell">
       <section className="portfolio-strip">
         <div className="portfolio-heading">
           <p className="eyebrow">Locked Workflow Portfolio</p>
-          <h2>Two validated slices, one still-active detailed viewer</h2>
+          <h2>Three validated slices, one still-narrow prototype surface</h2>
           <p className="portfolio-summary">
-            Both published artifacts are now visible in the UI read-only, but the detailed
-            step-by-step drill-in stays intentionally locked to the original marketing-review
-            workflow.
+            The app still avoids a broad workflow selector. It now shows the original detailed
+            lane, the annual compact lane, and a narrow reviewer-workbench prototype fed by one
+            pilot assist step from each workflow.
           </p>
         </div>
         <div className="portfolio-grid">
-          {[payload, annualPayload].map((item) => (
+          {portfolioPayloads.map((item) => (
             <article key={item.workflow.workflow_id} className="portfolio-card">
               <div className="portfolio-card-head">
                 <div>
                   <p className="panel-kicker">Locked workflow</p>
                   <h3>{item.workflow.workflow_name}</h3>
                 </div>
-                <span className="inline-chip neutral-chip">
-                  {item.workflow.workflow_id === payload.workflow.workflow_id
-                    ? "Detailed lane"
-                    : "Snapshot lane"}
-                </span>
+                <span className="inline-chip neutral-chip">{workflowLaneLabel(item)}</span>
               </div>
               <p className="portfolio-card-summary">{item.summary.first_build_wedge}</p>
               <div className="portfolio-metrics">
@@ -539,6 +613,241 @@ function App() {
             </article>
           </div>
         </article>
+      </section>
+
+      <section className="panel reviewer-prototype-panel">
+        <div className="panel-heading">
+          <p className="panel-kicker">Local prototype</p>
+          <h2>Shared reviewer workbench for assist-lane steps</h2>
+        </div>
+        <p className="detail-summary">{assistWorkbench.workbench_thesis.thesis}</p>
+        <p className="muted-note workbench-summary-note">
+          {assistWorkbench.workbench_thesis.reason}
+        </p>
+        <div className="detail-chip-row">
+          <span className="inline-chip neutral-chip">
+            {assistWorkbench.scope.assist_step_count} assist steps
+          </span>
+          <span className="inline-chip neutral-chip">
+            {assistWorkbench.scope.pilot_step_count} pilot steps
+          </span>
+          <span className="inline-chip neutral-chip">
+            {assistWorkbench.reviewer_confirmation_pattern.count} explicit confirmation steps
+          </span>
+        </div>
+
+        <div className="reviewer-prototype-grid reviewer-prototype-top">
+          <article className="subpanel">
+            <h3>Pilot queue</h3>
+            <p className="muted-note">
+              One top assist step per workflow. This is intentionally narrower than a general
+              workflow selector.
+            </p>
+            <div className="pilot-step-list">
+              {assistWorkbench.pilot_steps.map((step) => (
+                <button
+                  key={step.step_id}
+                  className={`pilot-step-card ${
+                    selectedWorkbenchStep.step_id === step.step_id
+                      ? "pilot-step-card-active"
+                      : ""
+                  }`}
+                  type="button"
+                  onClick={() => setSelectedWorkbenchStepId(step.step_id)}
+                >
+                  <span className="callout-label">{step.workflow_name}</span>
+                  <strong>{step.step_name}</strong>
+                  <p>{step.build_implication}</p>
+                  <div className="pilot-step-foot">
+                    <span className="inline-chip mode-assist">Assist</span>
+                    <span className="inline-chip neutral-chip">
+                      Build priority {step.build_priority_score}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="detail-chip-row prototype-section-row">
+              {assistWorkbench.v1_sections.map((section) => (
+                <span key={section.section_id} className="inline-chip neutral-chip">
+                  {section.title}
+                </span>
+              ))}
+            </div>
+          </article>
+
+          <article className="subpanel">
+            <h3>Selected step context</h3>
+            <p>{selectedWorkbenchStep.step_description}</p>
+            <div className="detail-chip-row">
+              <span className="inline-chip neutral-chip">
+                {selectedWorkbenchPilot.workflow_name}
+              </span>
+              <span className={`inline-chip ${modeMeta[selectedWorkbenchStep.recommendation].tone}`}>
+                {modeMeta[selectedWorkbenchStep.recommendation].label}
+              </span>
+              <span className="inline-chip neutral-chip">
+                Trust {selectedWorkbenchStep.review.trust_score}
+              </span>
+              <span className="inline-chip neutral-chip">
+                Confidence {formatPercent(selectedWorkbenchStep.confidence)}
+              </span>
+              {workbenchNeedsExplicitConfirmation ? (
+                <span className="inline-chip mode-assist">Reviewer confirmation</span>
+              ) : null}
+            </div>
+            <div className="snapshot-list workbench-context-list">
+              <div className="snapshot-row">
+                <span>Owner</span>
+                <strong>{selectedWorkbenchStep.human_owner_role}</strong>
+              </div>
+              <div className="snapshot-row">
+                <span>Why assist</span>
+                <p>{selectedWorkbenchStep.review.decision_rationale.why_this_mode}</p>
+              </div>
+              <div className="snapshot-row">
+                <span>Current caution</span>
+                <p>
+                  {selectedWorkbenchStep.review.review_actions[0] ??
+                    "No active caution for this pilot step."}
+                </p>
+              </div>
+            </div>
+            <h3 className="secondary-heading">Same-workflow support steps</h3>
+            <ul className="simple-list compact-simple-list">
+              {relatedAssistSteps.map((step) => (
+                <li key={step.step_id}>
+                  <strong>{step.step_name}</strong>
+                  <span>{step.build_implication}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </div>
+
+        <div className="reviewer-prototype-grid reviewer-prototype-main">
+          <article className="subpanel">
+            <h3>Evidence</h3>
+            <div className="workbench-evidence-grid">
+              <section>
+                <h4>Artifacts in play</h4>
+                <ul className="simple-list compact-simple-list">
+                  {selectedWorkbenchStep.artifacts.map((artifact) => (
+                    <li key={artifact.artifact_id}>
+                      <strong>{artifact.name}</strong>
+                      <span>{artifact.artifact_type}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section>
+                <h4>Evidence notes</h4>
+                <ul className="evidence-list compact-evidence-list">
+                  {selectedWorkbenchStep.evidence_notes.map((note) => (
+                    <li key={`${note.source_id}-${note.claim}`}>
+                      <div className="evidence-head">
+                        <a href={note.source_url} target="_blank" rel="noreferrer">
+                          {note.source_title}
+                        </a>
+                        <div className="evidence-meta">
+                          <span className="inline-chip neutral-chip">
+                            {selectedWorkbenchSourceLookup[note.source_id]?.source_type ??
+                              "source"}
+                          </span>
+                          <span className="inline-chip neutral-chip">
+                            {formatDateLabel(
+                              selectedWorkbenchSourceLookup[note.source_id]?.published_date ??
+                                "",
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                      <p>{note.claim}</p>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          </article>
+
+          <article className="subpanel">
+            <h3>Draft</h3>
+            <p className="muted-note">
+              Local-only prototype state. The browser keeps the working draft for this session,
+              but nothing is written back to a server.
+            </p>
+            <textarea
+              className="workbench-textarea"
+              value={workbenchDraft}
+              onChange={(event) =>
+                setWorkbenchDrafts((current) => ({
+                  ...current,
+                  [selectedWorkbenchStep.step_id]: event.target.value,
+                }))
+              }
+            />
+            <div className="workbench-support-list">
+              {assistWorkbench.shared_jobs_to_be_done.map((job) => (
+                <div key={job.job_id} className="support-card">
+                  <strong>{job.job}</strong>
+                  <p>{job.backed_by_fields.join(", ")}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article className="subpanel">
+            <h3>Decision</h3>
+            <p className="muted-note">
+              The prototype records a reviewer outcome locally, then points to the next human gate
+              instead of auto-resolving the workflow.
+            </p>
+            <div className="outcome-button-row">
+              {(["confirm", "revise", "escalate"] as ReviewerOutcome[]).map((outcome) => (
+                <button
+                  key={outcome}
+                  className={`outcome-button ${
+                    workbenchOutcome === outcome ? "outcome-button-active" : ""
+                  }`}
+                  type="button"
+                  onClick={() =>
+                    setWorkbenchOutcomes((current) => ({
+                      ...current,
+                      [selectedWorkbenchStep.step_id]: outcome,
+                    }))
+                  }
+                >
+                  {outcomeLabel(outcome)}
+                </button>
+              ))}
+            </div>
+            <textarea
+              className="workbench-textarea workbench-textarea-compact"
+              placeholder="Why are you confirming, revising, or escalating this step?"
+              value={workbenchReason}
+              onChange={(event) =>
+                setWorkbenchReasons((current) => ({
+                  ...current,
+                  [selectedWorkbenchStep.step_id]: event.target.value,
+                }))
+              }
+            />
+            <div className="snapshot-list workbench-context-list">
+              <div className="snapshot-row">
+                <span>Current outcome</span>
+                <strong>{workbenchOutcome ? outcomeLabel(workbenchOutcome) : "Not set"}</strong>
+              </div>
+              <div className="snapshot-row">
+                <span>Next human gate</span>
+                <p>{nextHumanGate.step_name}</p>
+              </div>
+              <div className="snapshot-row">
+                <span>Why this stays human</span>
+                <p>{selectedWorkbenchPayload.summary.blocked_pattern}</p>
+              </div>
+            </div>
+          </article>
+        </div>
       </section>
 
       <main className="workbench-grid">

@@ -24,7 +24,7 @@ This repo now includes three locked workflow slices:
 - one inspectable Python scoring pipeline
 - three published rationale-backed surface-map payloads
 - one trust-review layer that checks source coverage before any UI work
-- one thin read-only React viewer that keeps the full drill-in on the marketing-review payload while exposing a compact annual ADV drill-in in the same surface
+- one thin React viewer that keeps the full drill-in on the marketing-review payload, exposes a compact annual ADV drill-in, and now includes a narrow local reviewer-workbench prototype for three pilot assist steps
 
 ## Canonical Build Truth
 
@@ -112,9 +112,9 @@ NPM_CONFIG_CACHE=/tmp/npm-cache npm run dev
 ```
 
 Current note:
-- `apps/web` currently exposes the marketing-review and annual ADV artifacts read-only.
+- `apps/web` currently exposes the marketing-review detailed lane, the annual ADV compact lane, and a local reviewer-workbench prototype over one pilot assist step from each workflow.
 - The detailed drill-in remains richest on the marketing-review workflow, with a smaller annual ADV drill-in now available in the same screen.
-- The new code-of-ethics exception-review artifact is published in the repo, but it is not yet surfaced in the UI.
+- The code-of-ethics exception-review workflow is now surfaced only through the pilot reviewer-workbench prototype, not through a broad workflow selector.
 - The new pattern-summary artifact is a repo-side strategy output, not a new UI surface or workflow router.
 - The new reviewer-workbench slice is also a repo-side design output; it defines the shared assist-lane surface before any broader UI implementation.
 - This repo still does not support multi-workflow switching or orchestration in the UI.

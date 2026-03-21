@@ -8,12 +8,12 @@ Intended responsibilities:
 Current slice:
 - read-only React + TypeScript viewer over the published marketing-review surface-map artifact
 - compact read-only drill-in for the annual Form ADV update artifact in the same screen
-- the code-of-ethics exception-review workflow is now publishable in the repo, but not yet surfaced in the UI
+- narrow local reviewer-workbench prototype over one pilot assist step from each of the three locked workflows
 - no scoring logic in the UI
 - no write paths, auth, or orchestration
 
 Current non-goal:
-- no multi-workflow switching in the UI yet; the second locked workflow is inspectable, while the third remains artifact-only until we deliberately expand the viewer
+- no multi-workflow switching in the UI yet; the third workflow only appears through the workbench prototype, not as a general browsing lane
 
 Local commands:
 - `NPM_CONFIG_CACHE=/tmp/npm-cache npm install`

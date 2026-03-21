@@ -11,6 +11,14 @@ const surfaceMapAnnualPath = path.resolve(
   repoRoot,
   "artifacts/ria_annual_adv_update.surface_map.json",
 );
+const surfaceMapCodeEthicsPath = path.resolve(
+  repoRoot,
+  "artifacts/ria_code_of_ethics_exception_review.surface_map.json",
+);
+const assistWorkbenchSlicePath = path.resolve(
+  repoRoot,
+  "artifacts/ria_assist_lane_workbench_slice.json",
+);
 
 export default defineConfig({
   plugins: [react()],
@@ -18,6 +26,8 @@ export default defineConfig({
     alias: {
       "@surface-map": surfaceMapPath,
       "@surface-map-annual": surfaceMapAnnualPath,
+      "@surface-map-code-ethics": surfaceMapCodeEthicsPath,
+      "@assist-workbench-slice": assistWorkbenchSlicePath,
     },
   },
   server: {
