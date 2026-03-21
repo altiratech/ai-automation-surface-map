@@ -77,10 +77,23 @@ function App() {
   const isWeakestTrustStep = selectedStep.step_id === weakestStepId;
   const isLowestConfidenceStep =
     selectedStep.step_id === payload.summary.lowest_confidence_step.step_id;
+  const stepsAboveTrustFloor = payload.step_results.filter(
+    (step) => step.review.trust_score >= 80,
+  ).length;
+  const totalUnknowns = payload.step_results.reduce(
+    (total, step) => total + step.review.unknown_count,
+    0,
+  );
+  const activeCautionCount = payload.step_results.filter(
+    (step) => step.review.review_actions.length > 0,
+  ).length;
+  const hardHumanGateCount = payload.step_results.filter(
+    (step) => step.hard_human_gate,
+  ).length;
   const primaryReviewAction =
     selectedQueueItem?.action ??
     selectedStep.review.review_actions[0] ??
-    "No immediate action required.";
+    "No remaining caution in the current slice.";
 
   return (
     <div className="page-shell">
@@ -117,6 +130,31 @@ function App() {
           </div>
         </div>
       </header>
+
+      <section className="trust-story-strip">
+        <article className="trust-story-card">
+          <span className="callout-label">Trust-complete steps</span>
+          <strong>
+            {stepsAboveTrustFloor}/{payload.step_results.length}
+          </strong>
+          <p>Every step is now above the low-80 trust floor for this locked workflow.</p>
+        </article>
+        <article className="trust-story-card">
+          <span className="callout-label">Open unknowns</span>
+          <strong>{totalUnknowns}</strong>
+          <p>Firm-policy variation is now modeled as configuration, not unresolved debt.</p>
+        </article>
+        <article className="trust-story-card">
+          <span className="callout-label">Active cautions</span>
+          <strong>{activeCautionCount}</strong>
+          <p>Only substantive reviewer cautions remain in the queue.</p>
+        </article>
+        <article className="trust-story-card">
+          <span className="callout-label">Human-only gates</span>
+          <strong>{hardHumanGateCount}</strong>
+          <p>The publication approval decision still stays explicitly human.</p>
+        </article>
+      </section>
 
       <section className="summary-grid">
         <article className="panel mode-summary-panel">
@@ -170,6 +208,10 @@ function App() {
             <p className="panel-kicker">Review queue</p>
             <h2>What still deserves attention</h2>
           </div>
+          <p className="queue-note">
+            The queue now shows only steps with remaining reviewer action, not resolved edge
+            assumptions.
+          </p>
           <div className="queue-summary">
             <button
               className="queue-summary-card"
@@ -234,6 +276,15 @@ function App() {
                     <strong>{step.step_name}</strong>
                     <span className={`inline-chip ${modeMeta[step.recommendation].tone}`}>
                       {modeMeta[step.recommendation].label}
+                    </span>
+                    <span
+                      className={`inline-chip ${
+                        step.review.review_actions.length === 0
+                          ? "step-status-clear"
+                          : "step-status-caution"
+                      }`}
+                    >
+                      {step.review.review_actions.length === 0 ? "Cleared" : "Caution"}
                     </span>
                   </div>
                   <p>{step.human_owner_role}</p>

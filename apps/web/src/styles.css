@@ -158,6 +158,34 @@ button {
   gap: 20px;
 }
 
+.trust-story-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.trust-story-card {
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(17, 32, 40, 0.08);
+  background: rgba(255, 249, 239, 0.74);
+  box-shadow: 0 18px 56px rgba(17, 32, 40, 0.06);
+}
+
+.trust-story-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.trust-story-card p,
+.queue-note {
+  margin: 10px 0 0;
+  color: #52646a;
+}
+
 .summary-grid {
   grid-template-columns: 1.15fr 1fr 0.9fr;
   margin-top: 22px;
@@ -302,6 +330,16 @@ button {
 
 .priority-medium {
   background: rgba(196, 116, 29, 0.14);
+  color: #8b4a04;
+}
+
+.step-status-clear {
+  background: rgba(39, 124, 82, 0.08);
+  color: #14553b;
+}
+
+.step-status-caution {
+  background: rgba(190, 116, 28, 0.12);
   color: #8b4a04;
 }
 
@@ -581,6 +619,7 @@ button {
 }
 
 @media (max-width: 1180px) {
+  .trust-story-strip,
   .summary-grid {
     grid-template-columns: 1fr;
   }
