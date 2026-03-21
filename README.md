@@ -20,6 +20,7 @@ This repo now includes the first locked slice:
 - one inspectable Python scoring pipeline
 - one published rationale-backed surface-map payload
 - one trust-review layer that checks source coverage before any UI work
+- one thin read-only React viewer that presents the current payload without changing the scoring core
 
 ## Canonical Build Truth
 
@@ -69,3 +70,11 @@ Run the local verification suite:
 
 Published artifact:
 - `artifacts/ria_marketing_rule_review.surface_map.json`
+
+Read-only web viewer:
+
+```bash
+cd apps/web
+NPM_CONFIG_CACHE=/tmp/npm-cache npm install
+NPM_CONFIG_CACHE=/tmp/npm-cache npm run dev
+```
