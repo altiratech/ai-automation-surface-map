@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import surfaceMap from "@surface-map";
+import annualSurfaceMap from "@surface-map-annual";
 
 import type {
   RecommendationMode,
@@ -10,6 +11,7 @@ import type {
 } from "./types";
 
 const payload = surfaceMap as SurfaceMapPayload;
+const annualPayload = annualSurfaceMap as SurfaceMapPayload;
 
 const modeMeta: Record<
   RecommendationMode,
@@ -63,6 +65,26 @@ function formatDateLabel(value: string): string {
   }).format(parsed);
 }
 
+function workflowStatusLabel(item: SurfaceMapPayload): string {
+  return item.trust_summary.read_only_ui_ready ? "Ready" : "Hold";
+}
+
+function stepNameForPayload(item: SurfaceMapPayload, stepId: string): string {
+  return item.step_results.find((step) => step.step_id === stepId)?.step_name ?? stepId;
+}
+
+function cautionCountForPayload(item: SurfaceMapPayload): number {
+  return item.step_results.filter((step) => step.review.review_actions.length > 0).length;
+}
+
+function humanGateCountForPayload(item: SurfaceMapPayload): number {
+  return item.step_results.filter((step) => step.hard_human_gate).length;
+}
+
+function trustCompleteCountForPayload(item: SurfaceMapPayload): number {
+  return item.step_results.filter((step) => step.review.trust_score >= 80).length;
+}
+
 function App() {
   const [selectedStepId, setSelectedStepId] = useState(weakestStepId);
   const selectedStep =
@@ -94,9 +116,84 @@ function App() {
     selectedQueueItem?.action ??
     selectedStep.review.review_actions[0] ??
     "No remaining caution in the current slice.";
+  const annualWeakestStepName = stepNameForPayload(
+    annualPayload,
+    annualPayload.trust_summary.weakest_step.step_id,
+  );
 
   return (
     <div className="page-shell">
+      <section className="portfolio-strip">
+        <div className="portfolio-heading">
+          <p className="eyebrow">Locked Workflow Portfolio</p>
+          <h2>Two validated slices, one still-active detailed viewer</h2>
+          <p className="portfolio-summary">
+            Both published artifacts are now visible in the UI read-only, but the detailed
+            step-by-step drill-in stays intentionally locked to the original marketing-review
+            workflow.
+          </p>
+        </div>
+        <div className="portfolio-grid">
+          {[payload, annualPayload].map((item) => (
+            <article key={item.workflow.workflow_id} className="portfolio-card">
+              <div className="portfolio-card-head">
+                <div>
+                  <p className="panel-kicker">Locked workflow</p>
+                  <h3>{item.workflow.workflow_name}</h3>
+                </div>
+                <span className="inline-chip neutral-chip">
+                  {item.workflow.workflow_id === payload.workflow.workflow_id
+                    ? "Detailed lane"
+                    : "Snapshot lane"}
+                </span>
+              </div>
+              <p className="portfolio-card-summary">{item.summary.first_build_wedge}</p>
+              <div className="portfolio-metrics">
+                <div>
+                  <span>Trust</span>
+                  <strong>{item.trust_summary.workflow_trust_score}</strong>
+                </div>
+                <div>
+                  <span>UI readiness</span>
+                  <strong>{workflowStatusLabel(item)}</strong>
+                </div>
+                <div>
+                  <span>Trust-complete steps</span>
+                  <strong>
+                    {trustCompleteCountForPayload(item)}/{item.step_results.length}
+                  </strong>
+                </div>
+                <div>
+                  <span>Active cautions</span>
+                  <strong>{cautionCountForPayload(item)}</strong>
+                </div>
+                <div>
+                  <span>Human-only gates</span>
+                  <strong>{humanGateCountForPayload(item)}</strong>
+                </div>
+                <div>
+                  <span>Weakest step</span>
+                  <strong>
+                    {stepNameForPayload(item, item.trust_summary.weakest_step.step_id)}
+                  </strong>
+                </div>
+              </div>
+              <div className="portfolio-mode-row">
+                {(Object.keys(item.summary.mode_counts) as RecommendationMode[]).map((mode) => (
+                  <span key={mode} className={`inline-chip ${modeMeta[mode].tone}`}>
+                    {modeMeta[mode].label}: {item.summary.mode_counts[mode]}
+                  </span>
+                ))}
+              </div>
+              <div className="portfolio-note">
+                <span className="callout-label">Top build step</span>
+                <strong>{item.summary.highest_priority_build_step.step_name}</strong>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <header className="hero-panel">
         <div className="hero-copy">
           <p className="eyebrow">AI Automation Surface Map</p>
@@ -251,6 +348,77 @@ function App() {
               </li>
             ))}
           </ul>
+        </article>
+      </section>
+
+      <section className="secondary-snapshot-grid">
+        <article className="panel annual-snapshot-panel">
+          <div className="panel-heading">
+            <p className="panel-kicker">Second locked workflow</p>
+            <h2>{annualPayload.workflow.workflow_name}</h2>
+          </div>
+          <p className="detail-summary">{annualPayload.summary.first_build_wedge}</p>
+          <div className="annual-highlight-grid">
+            <div className="callout-card">
+              <p className="callout-label">Highest-priority buildable step</p>
+              <strong>{annualPayload.summary.highest_priority_build_step.step_name}</strong>
+              <p>
+                Recommendation:{" "}
+                <span
+                  className={`inline-chip ${
+                    modeMeta[annualPayload.summary.highest_priority_build_step.recommendation].tone
+                  }`}
+                >
+                  {modeMeta[annualPayload.summary.highest_priority_build_step.recommendation].label}
+                </span>
+              </p>
+            </div>
+            <div className="callout-card warning-card">
+              <p className="callout-label">Hard guardrail</p>
+              <strong>{annualPayload.summary.hard_guardrail_step.step_name}</strong>
+              <p>{annualPayload.summary.blocked_pattern}</p>
+            </div>
+          </div>
+          <div className="annual-detail-grid">
+            <article className="subpanel">
+              <h3>Current review queue</h3>
+              <ul className="queue-list compact-queue-list">
+                {annualPayload.trust_summary.review_queue.map((item) => (
+                  <li key={item.step_id}>
+                    <div className="queue-item static-queue-item">
+                      <span className={`priority-pill priority-${item.priority}`}>
+                        {item.priority}
+                      </span>
+                      <strong>{stepNameForPayload(annualPayload, item.step_id)}</strong>
+                      <p>{item.action}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </article>
+            <article className="subpanel">
+              <h3>Why this matters</h3>
+              <p>
+                This second artifact proves the scoring model can handle a different RIA workflow
+                shape without adding orchestration, workflow switching, or browser-side scoring.
+              </p>
+              <p>
+                The remaining caution concentration is where we would expect it:
+                brochure/disclosure reconciliation and the filing-signoff gate.
+              </p>
+              <div className="detail-chip-row">
+                <span className="inline-chip neutral-chip">
+                  Weakest step: {annualWeakestStepName}
+                </span>
+                <span className="inline-chip neutral-chip">
+                  Trust {annualPayload.trust_summary.workflow_trust_score}
+                </span>
+                <span className="inline-chip neutral-chip">
+                  Read-only {workflowStatusLabel(annualPayload)}
+                </span>
+              </div>
+            </article>
+          </div>
         </article>
       </section>
 
@@ -532,7 +700,7 @@ function App() {
 }
 
 function stepNameFor(stepId: string): string {
-  return payload.step_results.find((step) => step.step_id === stepId)?.step_name ?? stepId;
+  return stepNameForPayload(payload, stepId);
 }
 
 function dimensionLabel(dimension: string): string {
