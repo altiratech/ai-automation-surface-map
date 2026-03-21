@@ -277,43 +277,54 @@
       ],
       "source_ids": [
         "sec_small_entity_marketing_guide",
-        "sec_marketing_rule_exam_alert_2022",
+        "sec_marketing_rule_exam_alert_2023",
+        "sec_marketing_rule_faq_2026",
         "sec_marketing_rule_observations_2024"
       ],
       "hard_human_gate": false,
       "dimension_scores": {
         "automation_fit": {
-          "value": 58,
-          "rationale": "The step can use checklists and pattern matching, but facts and circumstances still matter."
+          "value": 62,
+          "rationale": "The step can follow repeatable rule categories, channel metadata, and content triggers, especially for testimonials, ratings, and performance-like claims."
         },
         "human_signoff_need": {
-          "value": 70,
-          "rationale": "Classification errors change the whole review path and should be confirmed by a human."
+          "value": 69,
+          "rationale": "A human should still confirm edge cases because classification changes which downstream review controls apply."
         },
         "liability_asymmetry": {
-          "value": 65,
-          "rationale": "A wrong classification can send the piece through the wrong controls and create downstream exposure."
+          "value": 63,
+          "rationale": "A wrong classification can route the item through the wrong controls, although later review steps can still catch some mistakes before publication."
         },
         "evidence_strength": {
-          "value": 72,
-          "rationale": "The rule text and exam alerts provide real anchors, but edge cases still depend on interpretation."
+          "value": 78,
+          "rationale": "The small-entity guide, 2023 exam alert, 2026 FAQ, and 2024 observations provide traceable anchors for common categories and known edge cases."
         }
       },
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame.",
+          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a base frame for deciding whether a communication should enter the marketing-rule review path.",
           "supports_dimensions": [
             "automation_fit",
             "evidence_strength"
           ]
         },
         {
-          "source_id": "sec_marketing_rule_exam_alert_2022",
-          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible.",
+          "source_id": "sec_marketing_rule_exam_alert_2023",
+          "claim": "The SEC's additional examination areas for testimonials, endorsements, third-party ratings, and Form ADV alignment create clearer branch points for classifying the communication before deeper review.",
           "supports_dimensions": [
+            "automation_fit",
             "evidence_strength",
             "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_faq_2026",
+          "claim": "The updated FAQ says advisers may need to determine whether portfolio or investment characteristics count as performance and emphasizes facts-and-circumstances analysis for certain presentations, which supports assistive classification rather than autonomous routing.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
+            "evidence_strength"
           ]
         },
         {

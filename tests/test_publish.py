@@ -49,6 +49,18 @@ class FirstSlicePublishTests(unittest.TestCase):
             {note["source_id"] for note in remediation_step["evidence_notes"]},
         )
 
+    def test_step_two_uses_edge_case_sources_and_retains_assist_posture(self) -> None:
+        payload = build_payload()
+        classification_step = next(
+            item for item in payload["step_results"] if item["step_id"] == "step-02-classify-advertisement"
+        )
+        self.assertEqual(classification_step["recommendation"], "assist")
+        self.assertGreaterEqual(classification_step["review"]["trust_score"], 80)
+        self.assertGreaterEqual(classification_step["review"]["evidence_note_count"], 4)
+        step_two_sources = {note["source_id"] for note in classification_step["evidence_notes"]}
+        self.assertIn("sec_marketing_rule_exam_alert_2023", step_two_sources)
+        self.assertIn("sec_marketing_rule_faq_2026", step_two_sources)
+
     def test_publish_writes_surface_map_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             output_path = Path(temp_dir) / "surface_map.json"
@@ -59,7 +71,7 @@ class FirstSlicePublishTests(unittest.TestCase):
             self.assertEqual(written["summary"]["mode_counts"]["keep-human"], 1)
             self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
             self.assertIn("workflow_trust_score", written["trust_summary"])
-            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 79)
+            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 80)
             self.assertIn(
                 written["trust_summary"]["weakest_step"]["step_id"],
                 {item["step_id"] for item in written["step_results"]},

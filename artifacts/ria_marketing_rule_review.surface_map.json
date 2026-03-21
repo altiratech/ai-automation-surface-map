@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T03:14:24Z",
+  "generated_at": "2026-03-21T08:28:20Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",
@@ -268,9 +268,9 @@
       "build_priority_score": 91
     },
     "lowest_confidence_step": {
-      "step_id": "step-02-classify-advertisement",
-      "step_name": "Classify whether the item is an advertisement",
-      "confidence": 0.41
+      "step_id": "step-05-draft-review-memo-and-remediation",
+      "step_name": "Draft the review memo and remediation path",
+      "confidence": 0.45
     },
     "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
   },
@@ -279,22 +279,22 @@
     "workflow_trust_grade": "B",
     "read_only_ui_ready": true,
     "weakest_step": {
-      "step_id": "step-02-classify-advertisement",
-      "trust_score": 76
+      "step_id": "step-06-principal-approval",
+      "trust_score": 78
     },
     "review_queue": [
       {
-        "step_id": "step-02-classify-advertisement",
-        "priority": "high",
-        "action": "Tighten the rationale or add supporting evidence because the score spread is still narrow."
-      },
-      {
         "step_id": "step-06-principal-approval",
-        "priority": "medium",
+        "priority": "high",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       },
       {
         "step_id": "step-01-intake-package",
+        "priority": "medium",
+        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
+      },
+      {
+        "step_id": "step-02-classify-advertisement",
         "priority": "medium",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       }
@@ -436,17 +436,17 @@
       "human_owner_role": "Compliance reviewer",
       "recommendation": "assist",
       "mode_scores": {
-        "automate": 54,
-        "assist": 65,
-        "keep-human": 61
+        "automate": 58,
+        "assist": 67,
+        "keep-human": 59
       },
       "ranked_modes": [
         "assist",
         "keep-human",
         "automate"
       ],
-      "build_priority_score": 65,
-      "confidence": 0.41,
+      "build_priority_score": 68,
+      "confidence": 0.47,
       "hard_human_gate": false,
       "gating_reason": null,
       "artifacts": [
@@ -464,23 +464,23 @@
       "dimension_scores": {
         "automation_fit": {
           "label": "Automation fit",
-          "value": 58,
-          "rationale": "The step can use checklists and pattern matching, but facts and circumstances still matter."
+          "value": 62,
+          "rationale": "The step can follow repeatable rule categories, channel metadata, and content triggers, especially for testimonials, ratings, and performance-like claims."
         },
         "human_signoff_need": {
           "label": "Human sign-off need",
-          "value": 70,
-          "rationale": "Classification errors change the whole review path and should be confirmed by a human."
+          "value": 69,
+          "rationale": "A human should still confirm edge cases because classification changes which downstream review controls apply."
         },
         "liability_asymmetry": {
           "label": "Liability asymmetry",
-          "value": 65,
-          "rationale": "A wrong classification can send the piece through the wrong controls and create downstream exposure."
+          "value": 63,
+          "rationale": "A wrong classification can route the item through the wrong controls, although later review steps can still catch some mistakes before publication."
         },
         "evidence_strength": {
           "label": "Evidence strength",
-          "value": 72,
-          "rationale": "The rule text and exam alerts provide real anchors, but edge cases still depend on interpretation."
+          "value": 78,
+          "rationale": "The small-entity guide, 2023 exam alert, 2026 FAQ, and 2024 observations provide traceable anchors for common categories and known edge cases."
         }
       },
       "evidence_notes": [
@@ -488,20 +488,32 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame.",
+          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a base frame for deciding whether a communication should enter the marketing-rule review path.",
           "supports_dimensions": [
             "automation_fit",
             "evidence_strength"
           ]
         },
         {
-          "source_id": "sec_marketing_rule_exam_alert_2022",
-          "source_title": "Examinations Focused on the New Investment Adviser Marketing Rule",
-          "source_url": "https://www.sec.gov/examinations-focused-new-investment-adviser-marketing-rule",
-          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible.",
+          "source_id": "sec_marketing_rule_exam_alert_2023",
+          "source_title": "Examinations Focused on Additional Areas of the Adviser Marketing Rule",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/examinations-focused-additional-areas-adviser-marketing-rule",
+          "claim": "The SEC's additional examination areas for testimonials, endorsements, third-party ratings, and Form ADV alignment create clearer branch points for classifying the communication before deeper review.",
           "supports_dimensions": [
+            "automation_fit",
             "evidence_strength",
             "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_faq_2026",
+          "source_title": "Marketing Compliance - Frequently Asked Questions",
+          "source_url": "https://www.sec.gov/rules-regulations/staff-guidance/division-investment-management-frequently-asked-questions/marketing-compliance-frequently-asked-questions",
+          "claim": "The updated FAQ says advisers may need to determine whether portfolio or investment characteristics count as performance and emphasizes facts-and-circumstances analysis for certain presentations, which supports assistive classification rather than autonomous routing.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
+            "evidence_strength"
           ]
         },
         {
@@ -520,10 +532,10 @@
       ],
       "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement.",
       "review": {
-        "trust_score": 76,
+        "trust_score": 80,
         "trust_grade": "B",
-        "source_count": 3,
-        "evidence_note_count": 3,
+        "source_count": 4,
+        "evidence_note_count": 4,
         "artifact_count": 2,
         "covered_dimensions": [
           "automation_fit",
@@ -535,18 +547,17 @@
         "unknown_count": 1,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
-          "confidence": 0.41,
-          "top_mode_margin": 4,
-          "evidence_strength": 72,
-          "note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+          "confidence": 0.47,
+          "top_mode_margin": 8,
+          "evidence_strength": 78,
+          "note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
         "decision_rationale": {
-          "why_this_mode": "Assist is the right lane because the step is partially structured (58) but still carries meaningful human sign-off need (70) and liability asymmetry (65).",
+          "why_this_mode": "Assist is the right lane because the step is partially structured (62) but still carries meaningful human sign-off need (69) and liability asymmetry (63).",
           "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
-          "confidence_note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+          "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
         "review_actions": [
-          "Tighten the rationale or add supporting evidence because the score spread is still narrow.",
           "Resolve the listed unknowns before turning this step into stronger product logic."
         ]
       }
