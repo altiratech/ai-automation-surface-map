@@ -89,10 +89,15 @@ class ScoringConfig:
     dimensions: dict[str, DimensionDefinition]
     mode_formulas: dict[str, ModeFormula]
     gates: dict[str, int]
+    review_thresholds: dict[str, int]
 
     @classmethod
     def from_raw(cls, raw: dict[str, Any]) -> "ScoringConfig":
-        _require_fields(raw, ("config_id", "version", "workflow_id", "dimensions", "mode_formulas", "gates"), context="scoring config")
+        _require_fields(
+            raw,
+            ("config_id", "version", "workflow_id", "dimensions", "mode_formulas", "gates", "review_thresholds"),
+            context="scoring config",
+        )
         dimensions_raw = raw["dimensions"]
         if not isinstance(dimensions_raw, dict):
             raise ValidationError("scoring config.dimensions must be an object")
@@ -125,6 +130,14 @@ class ScoringConfig:
             key: _validate_score(value, context=f"scoring config.gates.{key}")
             for key, value in gates_raw.items()
         }
+        review_thresholds_raw = raw["review_thresholds"]
+        if not isinstance(review_thresholds_raw, dict):
+            raise ValidationError("scoring config.review_thresholds must be an object")
+        review_thresholds: dict[str, int] = {}
+        for key, value in review_thresholds_raw.items():
+            if not isinstance(value, int):
+                raise ValidationError(f"scoring config.review_thresholds.{key} must be an integer")
+            review_thresholds[key] = value
 
         return cls(
             config_id=str(raw["config_id"]),
@@ -133,6 +146,7 @@ class ScoringConfig:
             dimensions=dimensions,
             mode_formulas=mode_formulas,
             gates=gates,
+            review_thresholds=review_thresholds,
         )
 
 
@@ -203,11 +217,19 @@ class DimensionAssessment:
 class EvidenceNote:
     source_id: str
     claim: str
+    supports_dimensions: tuple[str, ...]
 
     @classmethod
     def from_raw(cls, raw: dict[str, Any], *, context: str) -> "EvidenceNote":
-        _require_fields(raw, ("source_id", "claim"), context=context)
-        return cls(source_id=str(raw["source_id"]), claim=str(raw["claim"]))
+        _require_fields(raw, ("source_id", "claim", "supports_dimensions"), context=context)
+        supports_dimensions = raw["supports_dimensions"]
+        if not isinstance(supports_dimensions, list) or not all(isinstance(item, str) for item in supports_dimensions):
+            raise ValidationError(f"{context}.supports_dimensions must be a list of strings")
+        return cls(
+            source_id=str(raw["source_id"]),
+            claim=str(raw["claim"]),
+            supports_dimensions=tuple(supports_dimensions),
+        )
 
 
 @dataclass(frozen=True)
@@ -291,6 +313,13 @@ class WorkflowStep:
 
     def dimension_value(self, key: str) -> int:
         return self.dimension_scores[key].value
+
+    def supported_dimensions(self) -> set[str]:
+        return {
+            dimension_key
+            for note in self.evidence_notes
+            for dimension_key in note.supports_dimensions
+        }
 
 
 @dataclass(frozen=True)

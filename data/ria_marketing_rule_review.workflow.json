@@ -229,15 +229,26 @@
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "The review starts from identifiable advertisement conditions and content categories, which supports a structured intake packet."
+          "claim": "The review starts from identifiable advertisement conditions and content categories, which supports a structured intake packet.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2022",
-          "claim": "Examiners review policies, procedures, and books and records, so consistent packet assembly reduces readiness gaps."
+          "claim": "Examiners review policies, procedures, and books and records, so consistent packet assembly reduces readiness gaps.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_exam_priorities_2026",
-          "claim": "The priorities push firms toward stronger baseline compliance programs, which favors standardized intake over ad hoc email routing."
+          "claim": "The priorities push firms toward stronger baseline compliance programs, which favors standardized intake over ad hoc email routing.",
+          "supports_dimensions": [
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
@@ -257,7 +268,8 @@
       ],
       "source_ids": [
         "sec_small_entity_marketing_guide",
-        "sec_marketing_rule_exam_alert_2022"
+        "sec_marketing_rule_exam_alert_2022",
+        "sec_marketing_rule_observations_2024"
       ],
       "hard_human_gate": false,
       "dimension_scores": {
@@ -281,11 +293,27 @@
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame."
+          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2022",
-          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible."
+          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_observations_2024",
+          "claim": "Observed deficiencies around omissions and misleading inferences show why edge-case classification should still be confirmed by a human reviewer.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
         }
       ],
       "unknowns": [
@@ -332,19 +360,34 @@
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "The guide spells out conditions for testimonials, endorsements, third-party ratings, and performance information."
+          "claim": "The guide spells out conditions for testimonials, endorsements, third-party ratings, and performance information.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2023",
-          "claim": "The SEC explicitly elevated testimonials, endorsements, third-party ratings, and Form ADV alignment as focus areas."
+          "claim": "The SEC explicitly elevated testimonials, endorsements, third-party ratings, and Form ADV alignment as focus areas.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
-          "claim": "Recent charges show that missing disclosures and unsubstantiated claims still lead to enforcement."
+          "claim": "Recent charges show that missing disclosures and unsubstantiated claims still lead to enforcement.",
+          "supports_dimensions": [
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
-          "claim": "Hypothetical-performance handling remains an active enforcement topic when audience and policy controls are weak."
+          "claim": "Hypothetical-performance handling remains an active enforcement topic when audience and policy controls are weak.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
@@ -392,19 +435,35 @@
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "Advisers need a reasonable basis to substantiate material statements and must satisfy disclosure conditions around specific content types."
+          "claim": "Advisers need a reasonable basis to substantiate material statements and must satisfy disclosure conditions around specific content types.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_observations_2024",
-          "claim": "Observed deficiencies included unsubstantiated statements and unbalanced presentations, making evidence bundling a concrete control point."
+          "claim": "Observed deficiencies included unsubstantiated statements and unbalanced presentations, making evidence bundling a concrete control point.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
-          "claim": "The SEC has penalized firms for weak hypothetical-performance controls, which increases the value of structured support packages."
+          "claim": "The SEC has penalized firms for weak hypothetical-performance controls, which increases the value of structured support packages.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
-          "claim": "Enforcement tied to missing disclosures reinforces the need for a repeatable disclosure assembly step."
+          "claim": "Enforcement tied to missing disclosures reinforces the need for a repeatable disclosure assembly step.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         }
       ],
       "unknowns": [
@@ -426,6 +485,7 @@
         "review_memo"
       ],
       "source_ids": [
+        "sec_small_entity_marketing_guide",
         "sec_marketing_rule_observations_2024",
         "sec_exam_priorities_2026"
       ],
@@ -450,12 +510,28 @@
       },
       "evidence_notes": [
         {
+          "source_id": "sec_small_entity_marketing_guide",
+          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, but applying that frame to borderline claims still needs reviewer judgment.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
           "source_id": "sec_marketing_rule_observations_2024",
-          "claim": "Observed deficiencies around omissions, misleading inferences, and unfairly balanced presentations require nuanced reviewer explanations."
+          "claim": "Observed deficiencies around omissions, misleading inferences, and unfairly balanced presentations require nuanced reviewer explanations.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_exam_priorities_2026",
-          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning."
+          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
@@ -500,15 +576,28 @@
       "evidence_notes": [
         {
           "source_id": "sec_exam_priorities_2026",
-          "claim": "The examination program emphasizes core compliance readiness, which favors explicit supervisory ownership over autonomous release."
+          "claim": "The examination program emphasizes core compliance readiness, which favors explicit supervisory ownership over autonomous release.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
-          "claim": "Recent enforcement shows real penalties when advertisements go live with missing disclosures or unsupported statements."
+          "claim": "Recent enforcement shows real penalties when advertisements go live with missing disclosures or unsupported statements.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
-          "claim": "Hypothetical-performance violations illustrate how costly a wrong publication decision can become."
+          "claim": "Hypothetical-performance violations illustrate how costly a wrong publication decision can become.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
@@ -553,15 +642,26 @@
       "evidence_notes": [
         {
           "source_id": "sec_marketing_rule_exam_alert_2022",
-          "claim": "Books and records are a stated exam area, so archive completeness is a concrete control requirement."
+          "claim": "Books and records are a stated exam area, so archive completeness is a concrete control requirement.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_observations_2024",
-          "claim": "The SEC tied marketing-rule observations back to books-and-records and compliance-rule gaps."
+          "claim": "The SEC tied marketing-rule observations back to books-and-records and compliance-rule gaps.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
-          "claim": "Enforcement actions have included failures to maintain required copies, increasing the value of automated archival capture."
+          "claim": "Enforcement actions have included failures to maintain required copies, increasing the value of automated archival capture.",
+          "supports_dimensions": [
+            "liability_asymmetry"
+          ]
         }
       ],
       "unknowns": [

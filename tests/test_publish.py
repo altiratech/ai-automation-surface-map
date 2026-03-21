@@ -21,6 +21,17 @@ class FirstSlicePublishTests(unittest.TestCase):
         )
         self.assertEqual(approval_step["recommendation"], "keep-human")
         self.assertEqual(approval_step["gating_reason"], "hard-human-gate")
+        self.assertIn(
+            "approval support",
+            approval_step["review"]["review_actions"][-1],
+        )
+
+    def test_trust_review_enables_read_only_ui_and_covers_all_dimensions(self) -> None:
+        payload = build_payload()
+        self.assertTrue(payload["trust_summary"]["read_only_ui_ready"])
+        for step in payload["step_results"]:
+            self.assertEqual(step["review"]["missing_dimensions"], [])
+            self.assertGreaterEqual(step["review"]["source_count"], 3)
 
     def test_publish_writes_surface_map_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -31,6 +42,8 @@ class FirstSlicePublishTests(unittest.TestCase):
             self.assertEqual(written["artifact_id"], "ria_marketing_rule_review_surface_map")
             self.assertEqual(written["summary"]["mode_counts"]["keep-human"], 1)
             self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
+            self.assertIn("workflow_trust_score", written["trust_summary"])
+            self.assertEqual(written["trust_summary"]["weakest_step"]["step_id"], "step-05-draft-review-memo-and-remediation")
 
 
 if __name__ == "__main__":

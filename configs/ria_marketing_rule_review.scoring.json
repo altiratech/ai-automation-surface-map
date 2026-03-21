@@ -91,5 +91,11 @@
     "automate_min_evidence": 60,
     "keep_human_min_human_signoff": 85,
     "keep_human_min_liability": 80
+  },
+  "review_thresholds": {
+    "min_source_count_per_step": 3,
+    "min_dimension_coverage_pct": 100,
+    "min_step_trust_score_for_read_only_ui": 70,
+    "min_workflow_trust_score_for_read_only_ui": 75
   }
 }

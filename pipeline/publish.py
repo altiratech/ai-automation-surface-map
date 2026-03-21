@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .io import load_scoring_config, load_workflow_bundle
+from .review import review_workflow
 from .scoring import KEEP_HUMAN, score_workflow
 
 
@@ -48,7 +49,7 @@ def _serialize_artifacts(bundle) -> list[dict]:
     ]
 
 
-def _serialize_step_result(scored_step, bundle, config) -> dict:
+def _serialize_step_result(scored_step, review, bundle, config) -> dict:
     step = scored_step.step
     return {
         "step_id": step.step_id,
@@ -85,11 +86,26 @@ def _serialize_step_result(scored_step, bundle, config) -> dict:
                 "source_title": bundle.sources[note.source_id].title,
                 "source_url": bundle.sources[note.source_id].url,
                 "claim": note.claim,
+                "supports_dimensions": list(note.supports_dimensions),
             }
             for note in step.evidence_notes
         ],
         "unknowns": list(step.unknowns),
         "build_implication": step.build_implication,
+        "review": {
+            "trust_score": review.trust_score,
+            "trust_grade": review.trust_grade,
+            "source_count": review.source_count,
+            "evidence_note_count": review.evidence_note_count,
+            "artifact_count": review.artifact_count,
+            "covered_dimensions": list(review.covered_dimensions),
+            "missing_dimensions": list(review.missing_dimensions),
+            "unknown_count": review.unknown_count,
+            "read_only_ui_ready": review.read_only_ui_ready,
+            "confidence_breakdown": review.confidence_breakdown,
+            "decision_rationale": review.decision_rationale,
+            "review_actions": list(review.review_actions),
+        },
     }
 
 
@@ -154,8 +170,9 @@ def build_payload(
         )
 
     scored_steps = score_workflow(bundle.steps, config)
+    step_reviews, workflow_review = review_workflow(scored_steps, bundle, config)
     step_results = [
-        _serialize_step_result(step_result, bundle, config)
+        _serialize_step_result(step_result, step_reviews[step_result.step.step_id], bundle, config)
         for step_result in scored_steps
     ]
 
@@ -204,6 +221,7 @@ def build_payload(
                 for dimension in config.dimensions.values()
             ],
             "gates": config.gates,
+            "review_thresholds": config.review_thresholds,
         },
         "source_inventory": _serialize_sources(bundle),
         "artifact_inventory": _serialize_artifacts(bundle),
@@ -228,6 +246,17 @@ def build_payload(
                 "confidence": lowest_confidence.confidence,
             },
             "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
+        },
+        "trust_summary": {
+            "workflow_trust_score": workflow_review.workflow_trust_score,
+            "workflow_trust_grade": workflow_review.workflow_trust_grade,
+            "read_only_ui_ready": workflow_review.read_only_ui_ready,
+            "weakest_step": {
+                "step_id": workflow_review.weakest_step_id,
+                "trust_score": workflow_review.weakest_step_score,
+            },
+            "review_queue": list(workflow_review.review_queue),
+            "blocking_items": list(workflow_review.blocking_items),
         },
         "step_results": step_results,
         "build_decisions": _build_decisions(scored_steps),

@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T02:18:58Z",
+  "generated_at": "2026-03-21T02:38:17Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",
@@ -53,6 +53,12 @@
       "automate_min_evidence": 60,
       "keep_human_min_human_signoff": 85,
       "keep_human_min_liability": 80
+    },
+    "review_thresholds": {
+      "min_source_count_per_step": 3,
+      "min_dimension_coverage_pct": 100,
+      "min_step_trust_score_for_read_only_ui": 70,
+      "min_workflow_trust_score_for_read_only_ui": 75
     }
   },
   "source_inventory": [
@@ -259,6 +265,33 @@
     },
     "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
   },
+  "trust_summary": {
+    "workflow_trust_score": 79,
+    "workflow_trust_grade": "B",
+    "read_only_ui_ready": true,
+    "weakest_step": {
+      "step_id": "step-05-draft-review-memo-and-remediation",
+      "trust_score": 75
+    },
+    "review_queue": [
+      {
+        "step_id": "step-05-draft-review-memo-and-remediation",
+        "priority": "high",
+        "action": "Tighten the rationale or add supporting evidence because the score spread is still narrow."
+      },
+      {
+        "step_id": "step-02-classify-advertisement",
+        "priority": "medium",
+        "action": "Tighten the rationale or add supporting evidence because the score spread is still narrow."
+      },
+      {
+        "step_id": "step-06-principal-approval",
+        "priority": "medium",
+        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
+      }
+    ],
+    "blocking_items": []
+  },
   "step_results": [
     {
       "step_id": "step-01-intake-package",
@@ -325,25 +358,66 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "The review starts from identifiable advertisement conditions and content categories, which supports a structured intake packet."
+          "claim": "The review starts from identifiable advertisement conditions and content categories, which supports a structured intake packet.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2022",
           "source_title": "Examinations Focused on the New Investment Adviser Marketing Rule",
           "source_url": "https://www.sec.gov/examinations-focused-new-investment-adviser-marketing-rule",
-          "claim": "Examiners review policies, procedures, and books and records, so consistent packet assembly reduces readiness gaps."
+          "claim": "Examiners review policies, procedures, and books and records, so consistent packet assembly reduces readiness gaps.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_exam_priorities_2026",
           "source_title": "SEC Division of Examinations Announces 2026 Priorities",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2025-132-sec-division-examinations-announces-2026-priorities",
-          "claim": "The priorities push firms toward stronger baseline compliance programs, which favors standardized intake over ad hoc email routing."
+          "claim": "The priorities push firms toward stronger baseline compliance programs, which favors standardized intake over ad hoc email routing.",
+          "supports_dimensions": [
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
         "Firm-specific routing fields may vary by channel or outside counsel requirements."
       ],
-      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file."
+      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file.",
+      "review": {
+        "trust_score": 80,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 3,
+        "artifact_count": 3,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.54,
+          "top_mode_margin": 22,
+          "evidence_strength": 80,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (82) and evidence strength (80) comfortably outweigh human sign-off need (25) and liability asymmetry (30).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": [
+          "Resolve the listed unknowns before turning this step into stronger product logic."
+        ]
+      }
     },
     {
       "step_id": "step-02-classify-advertisement",
@@ -405,19 +479,68 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame."
+          "claim": "The guide lays out the rule's prohibited practices and content conditions, which gives a starting classification frame.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2022",
           "source_title": "Examinations Focused on the New Investment Adviser Marketing Rule",
           "source_url": "https://www.sec.gov/examinations-focused-new-investment-adviser-marketing-rule",
-          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible."
+          "claim": "The SEC signaled that advisers should update policies and procedures around the new rule, which implies classification logic must be defensible.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_observations_2024",
+          "source_title": "Initial Observations Regarding Advisers Act Marketing Rule Compliance",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-041724",
+          "claim": "Observed deficiencies around omissions and misleading inferences show why edge-case classification should still be confirmed by a human reviewer.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
         }
       ],
       "unknowns": [
         "Some firms treat social fragments, event remarks, or linked content with fact-specific overrides."
       ],
-      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement."
+      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement.",
+      "review": {
+        "trust_score": 76,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 3,
+        "artifact_count": 2,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.41,
+          "top_mode_margin": 4,
+          "evidence_strength": 72,
+          "note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (58) but still carries meaningful human sign-off need (70) and liability asymmetry (65).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "review_actions": [
+          "Tighten the rationale or add supporting evidence because the score spread is still narrow.",
+          "Resolve the listed unknowns before turning this step into stronger product logic."
+        ]
+      }
     },
     {
       "step_id": "step-03-flag-special-content",
@@ -484,31 +607,76 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "The guide spells out conditions for testimonials, endorsements, third-party ratings, and performance information."
+          "claim": "The guide spells out conditions for testimonials, endorsements, third-party ratings, and performance information.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_exam_alert_2023",
           "source_title": "Examinations Focused on Additional Areas of the Adviser Marketing Rule",
           "source_url": "https://www.sec.gov/compliance/risk-alerts/examinations-focused-additional-areas-adviser-marketing-rule",
-          "claim": "The SEC explicitly elevated testimonials, endorsements, third-party ratings, and Form ADV alignment as focus areas."
+          "claim": "The SEC explicitly elevated testimonials, endorsements, third-party ratings, and Form ADV alignment as focus areas.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
           "source_title": "SEC Charges Nine Investment Advisers in Ongoing Sweep into Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-121",
-          "claim": "Recent charges show that missing disclosures and unsubstantiated claims still lead to enforcement."
+          "claim": "Recent charges show that missing disclosures and unsubstantiated claims still lead to enforcement.",
+          "supports_dimensions": [
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
           "source_title": "SEC Charges Five Investment Advisers for Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-46",
-          "claim": "Hypothetical-performance handling remains an active enforcement topic when audience and policy controls are weak."
+          "claim": "Hypothetical-performance handling remains an active enforcement topic when audience and policy controls are weak.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
         "Creative assets may hide claims inside images or short video captions that require OCR or richer media parsing."
       ],
-      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but keep human confirmation before any approval."
+      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but keep human confirmation before any approval.",
+      "review": {
+        "trust_score": 80,
+        "trust_grade": "B",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 3,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.47,
+          "top_mode_margin": 8,
+          "evidence_strength": 78,
+          "note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (71) but still carries meaningful human sign-off need (62) and liability asymmetry (68).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
+        },
+        "review_actions": [
+          "Resolve the listed unknowns before turning this step into stronger product logic."
+        ]
+      }
     },
     {
       "step_id": "step-04-assemble-substantiation-and-disclosures",
@@ -580,31 +748,77 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "Advisers need a reasonable basis to substantiate material statements and must satisfy disclosure conditions around specific content types."
+          "claim": "Advisers need a reasonable basis to substantiate material statements and must satisfy disclosure conditions around specific content types.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_observations_2024",
           "source_title": "Initial Observations Regarding Advisers Act Marketing Rule Compliance",
           "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-041724",
-          "claim": "Observed deficiencies included unsubstantiated statements and unbalanced presentations, making evidence bundling a concrete control point."
+          "claim": "Observed deficiencies included unsubstantiated statements and unbalanced presentations, making evidence bundling a concrete control point.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "liability_asymmetry"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
           "source_title": "SEC Charges Five Investment Advisers for Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-46",
-          "claim": "The SEC has penalized firms for weak hypothetical-performance controls, which increases the value of structured support packages."
+          "claim": "The SEC has penalized firms for weak hypothetical-performance controls, which increases the value of structured support packages.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
           "source_title": "SEC Charges Nine Investment Advisers in Ongoing Sweep into Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-121",
-          "claim": "Enforcement tied to missing disclosures reinforces the need for a repeatable disclosure assembly step."
+          "claim": "Enforcement tied to missing disclosures reinforces the need for a repeatable disclosure assembly step.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         }
       ],
       "unknowns": [
         "Some firms may require outside-counsel review for unusual performance claims."
       ],
-      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review."
+      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review.",
+      "review": {
+        "trust_score": 82,
+        "trust_grade": "B",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 4,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.52,
+          "top_mode_margin": 13,
+          "evidence_strength": 83,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (86) and evidence strength (83) comfortably outweigh human sign-off need (35) and liability asymmetry (45).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": [
+          "Resolve the listed unknowns before turning this step into stronger product logic."
+        ]
+      }
     },
     {
       "step_id": "step-05-draft-review-memo-and-remediation",
@@ -678,22 +892,72 @@
       },
       "evidence_notes": [
         {
+          "source_id": "sec_small_entity_marketing_guide",
+          "source_title": "Investment Adviser Marketing",
+          "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
+          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, but applying that frame to borderline claims still needs reviewer judgment.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
           "source_id": "sec_marketing_rule_observations_2024",
           "source_title": "Initial Observations Regarding Advisers Act Marketing Rule Compliance",
           "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-041724",
-          "claim": "Observed deficiencies around omissions, misleading inferences, and unfairly balanced presentations require nuanced reviewer explanations."
+          "claim": "Observed deficiencies around omissions, misleading inferences, and unfairly balanced presentations require nuanced reviewer explanations.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_exam_priorities_2026",
           "source_title": "SEC Division of Examinations Announces 2026 Priorities",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2025-132-sec-division-examinations-announces-2026-priorities",
-          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning."
+          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
         "Some firms prefer short issue lists while others require formal memo language and legal-style citations."
       ],
-      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call."
+      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call.",
+      "review": {
+        "trust_score": 75,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 3,
+        "artifact_count": 5,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.38,
+          "top_mode_margin": 0,
+          "evidence_strength": 69,
+          "note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (60) but still carries meaningful human sign-off need (76) and liability asymmetry (78).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "review_actions": [
+          "Tighten the rationale or add supporting evidence because the score spread is still narrow.",
+          "Resolve the listed unknowns before turning this step into stronger product logic.",
+          "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        ]
+      }
     },
     {
       "step_id": "step-06-principal-approval",
@@ -755,25 +1019,69 @@
           "source_id": "sec_exam_priorities_2026",
           "source_title": "SEC Division of Examinations Announces 2026 Priorities",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2025-132-sec-division-examinations-announces-2026-priorities",
-          "claim": "The examination program emphasizes core compliance readiness, which favors explicit supervisory ownership over autonomous release."
+          "claim": "The examination program emphasizes core compliance readiness, which favors explicit supervisory ownership over autonomous release.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_general_2024",
           "source_title": "SEC Charges Nine Investment Advisers in Ongoing Sweep into Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-121",
-          "claim": "Recent enforcement shows real penalties when advertisements go live with missing disclosures or unsupported statements."
+          "claim": "Recent enforcement shows real penalties when advertisements go live with missing disclosures or unsupported statements.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
           "source_title": "SEC Charges Five Investment Advisers for Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-46",
-          "claim": "Hypothetical-performance violations illustrate how costly a wrong publication decision can become."
+          "claim": "Hypothetical-performance violations illustrate how costly a wrong publication decision can become.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
         }
       ],
       "unknowns": [
         "Some firms require dual sign-off when performance or promoter compensation is involved."
       ],
-      "build_implication": "Keep human. Build audit support around this step, not autonomous approval."
+      "build_implication": "Keep human. Build audit support around this step, not autonomous approval.",
+      "review": {
+        "trust_score": 78,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 3,
+        "artifact_count": 2,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.46,
+          "top_mode_margin": 24,
+          "evidence_strength": 64,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Keep Human is mandatory because this step is an explicit supervisory approval point.",
+          "why_not_automate": "Automation here should only package context and evidence for the accountable reviewer.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": [
+          "Resolve the listed unknowns before turning this step into stronger product logic.",
+          "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        ]
+      }
     },
     {
       "step_id": "step-07-archive-and-monitor",
@@ -835,25 +1143,66 @@
           "source_id": "sec_marketing_rule_exam_alert_2022",
           "source_title": "Examinations Focused on the New Investment Adviser Marketing Rule",
           "source_url": "https://www.sec.gov/examinations-focused-new-investment-adviser-marketing-rule",
-          "claim": "Books and records are a stated exam area, so archive completeness is a concrete control requirement."
+          "claim": "Books and records are a stated exam area, so archive completeness is a concrete control requirement.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_observations_2024",
           "source_title": "Initial Observations Regarding Advisers Act Marketing Rule Compliance",
           "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-041724",
-          "claim": "The SEC tied marketing-rule observations back to books-and-records and compliance-rule gaps."
+          "claim": "The SEC tied marketing-rule observations back to books-and-records and compliance-rule gaps.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "human_signoff_need"
+          ]
         },
         {
           "source_id": "sec_marketing_rule_enforcement_hypothetical_2024",
           "source_title": "SEC Charges Five Investment Advisers for Marketing Rule Violations",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2024-46",
-          "claim": "Enforcement actions have included failures to maintain required copies, increasing the value of automated archival capture."
+          "claim": "Enforcement actions have included failures to maintain required copies, increasing the value of automated archival capture.",
+          "supports_dimensions": [
+            "liability_asymmetry"
+          ]
         }
       ],
       "unknowns": [
         "Retention schedule and monitoring cadence may vary by firm policy and channel."
       ],
-      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness."
+      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness.",
+      "review": {
+        "trust_score": 81,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 3,
+        "artifact_count": 2,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 1,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.55,
+          "top_mode_margin": 18,
+          "evidence_strength": 85,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (88) and evidence strength (85) comfortably outweigh human sign-off need (30) and liability asymmetry (38).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": [
+          "Resolve the listed unknowns before turning this step into stronger product logic."
+        ]
+      }
     }
   ],
   "build_decisions": [

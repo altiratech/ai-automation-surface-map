@@ -19,6 +19,7 @@ This repo now includes the first locked slice:
 - one explicit step and artifact model
 - one inspectable Python scoring pipeline
 - one published rationale-backed surface-map payload
+- one trust-review layer that checks source coverage before any UI work
 
 ## Canonical Build Truth
 

@@ -15,6 +15,7 @@ class ScoredStep:
     ranked_modes: tuple[str, ...]
     recommendation: str
     confidence: float
+    top_mode_margin: int
     gating_reason: str | None
     build_priority_score: int
 
@@ -65,6 +66,11 @@ def _confidence(mode_scores: dict[str, int], evidence_strength: int) -> float:
     return round(bounded, 2)
 
 
+def _top_mode_margin(mode_scores: dict[str, int]) -> int:
+    ordered = sorted(mode_scores.values(), reverse=True)
+    return ordered[0] - ordered[1]
+
+
 def _build_priority_score(step: WorkflowStep, recommendation: str, mode_scores: dict[str, int]) -> int:
     automation_fit = step.dimension_value("automation_fit")
     human_signoff = step.dimension_value("human_signoff_need")
@@ -111,6 +117,7 @@ def score_workflow(steps: tuple[WorkflowStep, ...], config: ScoringConfig) -> li
                 ranked_modes=ranked_modes,
                 recommendation=recommendation,
                 confidence=_confidence(mode_scores, step.dimension_value("evidence_strength")),
+                top_mode_margin=_top_mode_margin(mode_scores),
                 gating_reason=gating_reason,
                 build_priority_score=_build_priority_score(step, recommendation, mode_scores),
             )
