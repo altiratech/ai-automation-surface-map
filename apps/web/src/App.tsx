@@ -35,6 +35,7 @@ const modeMeta: Record<
 };
 
 const weakestStepId = payload.trust_summary.weakest_step.step_id;
+const annualWeakestStepId = annualPayload.trust_summary.weakest_step.step_id;
 
 function formatPercent(value: number): string {
   return `${Math.round(value * 100)}%`;
@@ -87,14 +88,24 @@ function trustCompleteCountForPayload(item: SurfaceMapPayload): number {
 
 function App() {
   const [selectedStepId, setSelectedStepId] = useState(weakestStepId);
+  const [selectedAnnualStepId, setSelectedAnnualStepId] = useState(annualWeakestStepId);
   const selectedStep =
     payload.step_results.find((step) => step.step_id === selectedStepId) ??
     payload.step_results[0];
+  const selectedAnnualStep =
+    annualPayload.step_results.find((step) => step.step_id === selectedAnnualStepId) ??
+    annualPayload.step_results[0];
   const selectedQueueItem = payload.trust_summary.review_queue.find(
     (item) => item.step_id === selectedStep.step_id,
   );
+  const selectedAnnualQueueItem = annualPayload.trust_summary.review_queue.find(
+    (item) => item.step_id === selectedAnnualStep.step_id,
+  );
   const sourceLookup = Object.fromEntries(
     payload.source_inventory.map((source) => [source.source_id, source]),
+  ) as Record<string, SourceInventoryItem>;
+  const annualSourceLookup = Object.fromEntries(
+    annualPayload.source_inventory.map((source) => [source.source_id, source]),
   ) as Record<string, SourceInventoryItem>;
   const isWeakestTrustStep = selectedStep.step_id === weakestStepId;
   const isLowestConfidenceStep =
@@ -116,6 +127,10 @@ function App() {
     selectedQueueItem?.action ??
     selectedStep.review.review_actions[0] ??
     "No remaining caution in the current slice.";
+  const annualPrimaryReviewAction =
+    selectedAnnualQueueItem?.action ??
+    selectedAnnualStep.review.review_actions[0] ??
+    "No remaining caution in this workflow.";
   const annualWeakestStepName = stepNameForPayload(
     annualPayload,
     annualPayload.trust_summary.weakest_step.step_id,
@@ -416,6 +431,110 @@ function App() {
                 <span className="inline-chip neutral-chip">
                   Read-only {workflowStatusLabel(annualPayload)}
                 </span>
+              </div>
+            </article>
+          </div>
+          <div className="annual-drillin-grid">
+            <article className="subpanel">
+              <h3>Annual step lane</h3>
+              <div className="annual-step-list">
+                {annualPayload.step_results.map((step) => (
+                  <button
+                    key={step.step_id}
+                    className={`annual-step-row ${
+                      selectedAnnualStep.step_id === step.step_id
+                        ? "annual-step-row-active"
+                        : ""
+                    }`}
+                    type="button"
+                    onClick={() => setSelectedAnnualStepId(step.step_id)}
+                  >
+                    <div>
+                      <strong>{step.step_name}</strong>
+                      <p>{step.human_owner_role}</p>
+                    </div>
+                    <div className="annual-step-metrics">
+                      <span className={`inline-chip ${modeMeta[step.recommendation].tone}`}>
+                        {modeMeta[step.recommendation].label}
+                      </span>
+                      <span className="inline-chip neutral-chip">
+                        Trust {step.review.trust_score}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </article>
+            <article className="subpanel">
+              <h3>{selectedAnnualStep.step_name}</h3>
+              <p>{selectedAnnualStep.step_description}</p>
+              <div className="detail-chip-row">
+                <span
+                  className={`inline-chip ${modeMeta[selectedAnnualStep.recommendation].tone}`}
+                >
+                  {modeMeta[selectedAnnualStep.recommendation].label}
+                </span>
+                {selectedAnnualStep.hard_human_gate ? (
+                  <span className="inline-chip mode-keep-human">Hard human gate</span>
+                ) : null}
+                <span className="inline-chip neutral-chip">
+                  Confidence {formatPercent(selectedAnnualStep.confidence)}
+                </span>
+                <span className="inline-chip neutral-chip">
+                  Build priority {selectedAnnualStep.build_priority_score}
+                </span>
+              </div>
+              <div className="snapshot-list annual-snapshot-list">
+                <div className="snapshot-row">
+                  <span>Owner</span>
+                  <strong>{selectedAnnualStep.human_owner_role}</strong>
+                </div>
+                <div className="snapshot-row">
+                  <span>Primary review action</span>
+                  <p>{annualPrimaryReviewAction}</p>
+                </div>
+                <div className="snapshot-row">
+                  <span>Build implication</span>
+                  <p>{selectedAnnualStep.build_implication}</p>
+                </div>
+              </div>
+              <div className="annual-mini-grid">
+                <section>
+                  <h3 className="secondary-heading">Artifacts in play</h3>
+                  <ul className="simple-list compact-simple-list">
+                    {selectedAnnualStep.artifacts.map((artifact) => (
+                      <li key={artifact.artifact_id}>
+                        <strong>{artifact.name}</strong>
+                        <span>{artifact.artifact_type}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+                <section>
+                  <h3 className="secondary-heading">Evidence notes</h3>
+                  <ul className="evidence-list compact-evidence-list">
+                    {selectedAnnualStep.evidence_notes.map((note) => (
+                      <li key={`${note.source_id}-${note.claim}`}>
+                        <div className="evidence-head">
+                          <a href={note.source_url} target="_blank" rel="noreferrer">
+                            {note.source_title}
+                          </a>
+                          <div className="evidence-meta">
+                            <span className="inline-chip neutral-chip">
+                              {annualSourceLookup[note.source_id]?.source_type ?? "source"}
+                            </span>
+                            <span className="inline-chip neutral-chip">
+                              {formatDateLabel(
+                                annualSourceLookup[note.source_id]?.published_date ?? "",
+                              )}
+                            </span>
+                          </div>
+                        </div>
+                        <p>{note.claim}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               </div>
             </article>
           </div>

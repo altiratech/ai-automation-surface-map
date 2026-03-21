@@ -21,7 +21,7 @@ This repo now includes two locked workflow slices:
 - one inspectable Python scoring pipeline
 - two published rationale-backed surface-map payloads
 - one trust-review layer that checks source coverage before any UI work
-- one thin read-only React viewer that keeps the detailed drill-in on the marketing-review payload while exposing the annual ADV workflow as a static second-slice snapshot
+- one thin read-only React viewer that keeps the full drill-in on the marketing-review payload while exposing a compact annual ADV drill-in in the same surface
 
 ## Canonical Build Truth
 
@@ -89,5 +89,5 @@ NPM_CONFIG_CACHE=/tmp/npm-cache npm run dev
 
 Current note:
 - `apps/web` now exposes both locked artifacts read-only.
-- The detailed drill-in remains intentionally locked to the marketing-review workflow.
+- The detailed drill-in remains richest on the marketing-review workflow, with a smaller annual ADV drill-in now available in the same screen.
 - This repo still does not support multi-workflow switching or orchestration in the UI.
