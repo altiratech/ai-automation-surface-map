@@ -61,6 +61,20 @@ class FirstSlicePublishTests(unittest.TestCase):
         self.assertIn("sec_marketing_rule_exam_alert_2023", step_two_sources)
         self.assertIn("sec_marketing_rule_faq_2026", step_two_sources)
 
+    def test_step_six_keeps_human_gate_with_supervisory_source_support(self) -> None:
+        payload = build_payload()
+        approval_step = next(
+            item for item in payload["step_results"] if item["step_id"] == "step-06-principal-approval"
+        )
+        self.assertEqual(approval_step["recommendation"], "keep-human")
+        self.assertTrue(approval_step["hard_human_gate"])
+        self.assertGreaterEqual(approval_step["review"]["trust_score"], 80)
+        self.assertGreaterEqual(approval_step["review"]["evidence_note_count"], 4)
+        self.assertIn(
+            "sec_marketing_rule_exam_alert_2022",
+            {note["source_id"] for note in approval_step["evidence_notes"]},
+        )
+
     def test_publish_writes_surface_map_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             output_path = Path(temp_dir) / "surface_map.json"

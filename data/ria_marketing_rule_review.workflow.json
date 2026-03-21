@@ -580,6 +580,7 @@
         "approval_log"
       ],
       "source_ids": [
+        "sec_marketing_rule_exam_alert_2022",
         "sec_exam_priorities_2026",
         "sec_marketing_rule_enforcement_general_2024",
         "sec_marketing_rule_enforcement_hypothetical_2024"
@@ -587,23 +588,31 @@
       "hard_human_gate": true,
       "dimension_scores": {
         "automation_fit": {
-          "value": 22,
-          "rationale": "This is a supervisory judgment step, not just a checklist action."
+          "value": 20,
+          "rationale": "Templates can package context, but the publication decision itself is a supervisory release call rather than a repeatable checklist action."
         },
         "human_signoff_need": {
           "value": 96,
           "rationale": "The publication decision should stay with a named human decision-maker."
         },
         "liability_asymmetry": {
-          "value": 94,
+          "value": 95,
           "rationale": "A bad automated approval can put a noncompliant ad into market and create direct regulatory exposure."
         },
         "evidence_strength": {
-          "value": 64,
-          "rationale": "There is evidence for why the step matters, but the decision still requires accountable human judgment."
+          "value": 68,
+          "rationale": "Exam alerts, examination priorities, and recent enforcement releases all point to supervisory ownership, records, and release accountability even though the judgment remains human."
         }
       },
       "evidence_notes": [
+        {
+          "source_id": "sec_marketing_rule_exam_alert_2022",
+          "claim": "The SEC said advisers should update training, supervisory, oversight, and compliance programs around the marketing rule, which supports a named human approval owner rather than autonomous release logic.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
         {
           "source_id": "sec_exam_priorities_2026",
           "claim": "The examination program emphasizes core compliance readiness, which favors explicit supervisory ownership over autonomous release.",

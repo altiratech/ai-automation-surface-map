@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T08:28:20Z",
+  "generated_at": "2026-03-21T08:38:56Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",
@@ -265,7 +265,7 @@
       "step_id": "step-06-principal-approval",
       "step_name": "Record principal or CCO approval for publication",
       "recommendation": "keep-human",
-      "build_priority_score": 91
+      "build_priority_score": 92
     },
     "lowest_confidence_step": {
       "step_id": "step-05-draft-review-memo-and-remediation",
@@ -275,27 +275,27 @@
     "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
   },
   "trust_summary": {
-    "workflow_trust_score": 80,
+    "workflow_trust_score": 81,
     "workflow_trust_grade": "B",
     "read_only_ui_ready": true,
     "weakest_step": {
-      "step_id": "step-06-principal-approval",
-      "trust_score": 78
+      "step_id": "step-01-intake-package",
+      "trust_score": 80
     },
     "review_queue": [
       {
-        "step_id": "step-06-principal-approval",
+        "step_id": "step-01-intake-package",
         "priority": "high",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       },
       {
-        "step_id": "step-01-intake-package",
-        "priority": "medium",
+        "step_id": "step-02-classify-advertisement",
+        "priority": "high",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       },
       {
-        "step_id": "step-02-classify-advertisement",
-        "priority": "medium",
+        "step_id": "step-03-flag-special-content",
+        "priority": "high",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       }
     ],
@@ -998,16 +998,16 @@
       "recommendation": "keep-human",
       "mode_scores": {
         "automate": 27,
-        "assist": 63,
-        "keep-human": 87
+        "assist": 64,
+        "keep-human": 88
       },
       "ranked_modes": [
         "keep-human",
         "assist",
         "automate"
       ],
-      "build_priority_score": 91,
-      "confidence": 0.46,
+      "build_priority_score": 92,
+      "confidence": 0.48,
       "hard_human_gate": true,
       "gating_reason": "hard-human-gate",
       "artifacts": [
@@ -1025,8 +1025,8 @@
       "dimension_scores": {
         "automation_fit": {
           "label": "Automation fit",
-          "value": 22,
-          "rationale": "This is a supervisory judgment step, not just a checklist action."
+          "value": 20,
+          "rationale": "Templates can package context, but the publication decision itself is a supervisory release call rather than a repeatable checklist action."
         },
         "human_signoff_need": {
           "label": "Human sign-off need",
@@ -1035,16 +1035,26 @@
         },
         "liability_asymmetry": {
           "label": "Liability asymmetry",
-          "value": 94,
+          "value": 95,
           "rationale": "A bad automated approval can put a noncompliant ad into market and create direct regulatory exposure."
         },
         "evidence_strength": {
           "label": "Evidence strength",
-          "value": 64,
-          "rationale": "There is evidence for why the step matters, but the decision still requires accountable human judgment."
+          "value": 68,
+          "rationale": "Exam alerts, examination priorities, and recent enforcement releases all point to supervisory ownership, records, and release accountability even though the judgment remains human."
         }
       },
       "evidence_notes": [
+        {
+          "source_id": "sec_marketing_rule_exam_alert_2022",
+          "source_title": "Examinations Focused on the New Investment Adviser Marketing Rule",
+          "source_url": "https://www.sec.gov/examinations-focused-new-investment-adviser-marketing-rule",
+          "claim": "The SEC said advisers should update training, supervisory, oversight, and compliance programs around the marketing rule, which supports a named human approval owner rather than autonomous release logic.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
         {
           "source_id": "sec_exam_priorities_2026",
           "source_title": "SEC Division of Examinations Announces 2026 Priorities",
@@ -1082,10 +1092,10 @@
       ],
       "build_implication": "Keep human. Build audit support around this step, not autonomous approval.",
       "review": {
-        "trust_score": 78,
+        "trust_score": 81,
         "trust_grade": "B",
-        "source_count": 3,
-        "evidence_note_count": 3,
+        "source_count": 4,
+        "evidence_note_count": 4,
         "artifact_count": 2,
         "covered_dimensions": [
           "automation_fit",
@@ -1097,9 +1107,9 @@
         "unknown_count": 1,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
-          "confidence": 0.46,
+          "confidence": 0.48,
           "top_mode_margin": 24,
-          "evidence_strength": 64,
+          "evidence_strength": 68,
           "note": "Clear score separation supports the current recommendation."
         },
         "decision_rationale": {
