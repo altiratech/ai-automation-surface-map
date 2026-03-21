@@ -18,6 +18,10 @@ from pipeline.publish_ria_workflow_pattern_summary import (
     build_payload as build_pattern_payload,
     publish as publish_pattern_summary,
 )
+from pipeline.publish_ria_assist_lane_workbench_slice import (
+    build_payload as build_workbench_payload,
+    publish as publish_workbench_slice,
+)
 
 
 class FirstSlicePublishTests(unittest.TestCase):
@@ -279,6 +283,50 @@ class PatternSummaryPublishTests(unittest.TestCase):
                         "reviewer_confirmation_steps"
                     ]
                 ),
+                1,
+            )
+
+
+class AssistLaneWorkbenchSliceTests(unittest.TestCase):
+    def test_workbench_slice_covers_all_three_workflows_and_nine_assist_steps(self) -> None:
+        payload = build_workbench_payload()
+        self.assertEqual(payload["scope"]["workflow_count"], 3)
+        self.assertEqual(payload["scope"]["assist_step_count"], 9)
+        self.assertEqual(payload["scope"]["pilot_step_count"], 3)
+        self.assertIn(
+            "reviewer workbench",
+            payload["workbench_thesis"]["reason"],
+        )
+
+    def test_workbench_slice_pilot_steps_match_top_assist_steps(self) -> None:
+        payload = build_workbench_payload()
+        self.assertEqual(
+            [item["step_id"] for item in payload["pilot_steps"]],
+            [
+                "step-05-draft-review-memo-and-remediation",
+                "step-05-prepare-readiness-memo-and-exception-list",
+                "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+            ],
+        )
+        self.assertEqual(
+            [item["section_id"] for item in payload["v1_sections"]],
+            ["queue", "context", "evidence", "draft", "decision"],
+        )
+
+    def test_workbench_slice_publish_writes_expected_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "ria_assist_lane_workbench_slice.json"
+            payload = publish_workbench_slice(output_path=output_path)
+            self.assertTrue(output_path.exists())
+            written = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(written["artifact_id"], "ria_assist_lane_workbench_slice")
+            self.assertEqual(
+                written["generated_by"],
+                "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_assist_lane_workbench_slice",
+            )
+            self.assertGreaterEqual(len(written["shared_contract"]["common_step_fields"]), 10)
+            self.assertGreaterEqual(
+                written["reviewer_confirmation_pattern"]["count"],
                 1,
             )
 

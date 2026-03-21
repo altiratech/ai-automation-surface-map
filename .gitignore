@@ -22,3 +22,4 @@ artifacts/*
 !artifacts/ria_annual_adv_update.surface_map.json
 !artifacts/ria_code_of_ethics_exception_review.surface_map.json
 !artifacts/ria_workflow_pattern_summary.json
+!artifacts/ria_assist_lane_workbench_slice.json

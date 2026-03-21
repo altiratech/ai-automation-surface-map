@@ -9,12 +9,14 @@ Tracked workflow artifacts:
 
 Tracked synthesis artifact:
 - `ria_workflow_pattern_summary.json`
+- `ria_assist_lane_workbench_slice.json`
 
 The payload now includes:
 - per-step trust review sections
 - workflow-level read-only UI readiness
 - review queue items for the weakest-supported steps
 - one repo-side cross-slice product-pattern summary
+- one repo-side assist-lane reviewer-workbench design slice
 
 Regenerate the workflow artifacts with:
 - `/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish`
@@ -23,3 +25,4 @@ Regenerate the workflow artifacts with:
 
 Regenerate the synthesis artifact with:
 - `/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_workflow_pattern_summary`
+- `/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_assist_lane_workbench_slice`

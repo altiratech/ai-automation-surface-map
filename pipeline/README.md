@@ -7,6 +7,7 @@ Current publishers:
 - `publish_ria_annual_adv_update.py` for the locked annual Form ADV workflow
 - `publish_ria_code_of_ethics_exception_review.py` for the locked code-of-ethics workflow
 - `publish_ria_workflow_pattern_summary.py` for the static three-slice synthesis artifact
+- `publish_ria_assist_lane_workbench_slice.py` for the shared assist-lane reviewer-workbench design slice
 
 Recommended future subfolders if the repo deepens:
 - `ingest/`

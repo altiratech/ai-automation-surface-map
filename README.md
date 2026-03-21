@@ -19,6 +19,7 @@ This repo now includes three locked workflow slices:
 - one RIA annual Form ADV update workflow
 - one RIA code-of-ethics personal trading exception-review workflow
 - one static cross-slice pattern-summary artifact over those three workflows
+- one static assist-lane reviewer-workbench slice over the shared judgment-heavy steps
 - one explicit step and artifact model
 - one inspectable Python scoring pipeline
 - three published rationale-backed surface-map payloads
@@ -83,6 +84,12 @@ Generate the three-slice RIA pattern summary:
 /Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_workflow_pattern_summary
 ```
 
+Generate the shared assist-lane reviewer-workbench slice:
+
+```bash
+/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_assist_lane_workbench_slice
+```
+
 Run the local verification suite:
 
 ```bash
@@ -94,6 +101,7 @@ Published artifact:
 - `artifacts/ria_annual_adv_update.surface_map.json`
 - `artifacts/ria_code_of_ethics_exception_review.surface_map.json`
 - `artifacts/ria_workflow_pattern_summary.json`
+- `artifacts/ria_assist_lane_workbench_slice.json`
 
 Read-only web viewer:
 
@@ -108,4 +116,5 @@ Current note:
 - The detailed drill-in remains richest on the marketing-review workflow, with a smaller annual ADV drill-in now available in the same screen.
 - The new code-of-ethics exception-review artifact is published in the repo, but it is not yet surfaced in the UI.
 - The new pattern-summary artifact is a repo-side strategy output, not a new UI surface or workflow router.
+- The new reviewer-workbench slice is also a repo-side design output; it defines the shared assist-lane surface before any broader UI implementation.
 - This repo still does not support multi-workflow switching or orchestration in the UI.

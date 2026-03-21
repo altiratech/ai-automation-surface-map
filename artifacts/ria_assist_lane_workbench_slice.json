@@ -1,0 +1,329 @@
+{
+  "artifact_id": "ria_assist_lane_workbench_slice",
+  "artifact_version": "1.0",
+  "generated_at": "2026-03-21T19:37:55Z",
+  "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_assist_lane_workbench_slice",
+  "scope": {
+    "workflow_count": 3,
+    "assist_step_count": 9,
+    "pilot_step_count": 3,
+    "source_artifacts": [
+      "artifacts/ria_marketing_rule_review.surface_map.json",
+      "artifacts/ria_annual_adv_update.surface_map.json",
+      "artifacts/ria_code_of_ethics_exception_review.surface_map.json"
+    ],
+    "pattern_summary_artifact": "artifacts/ria_workflow_pattern_summary.json"
+  },
+  "workbench_thesis": {
+    "thesis": "The product is shaping into a compliance evidence and exception-preparation engine, not an autonomous compliance operator.",
+    "reason": "The three-slice pattern summary says the next shared build sequence is a reviewer workbench for assist-lane steps where confirmation, edits, and rationale visibility matter most."
+  },
+  "supporting_steps": [
+    {
+      "workflow_id": "ria-marketing-rule-review",
+      "workflow_name": "RIA marketing-rule review",
+      "step_id": "step-02-classify-advertisement",
+      "step_name": "Classify whether the item is an advertisement",
+      "build_priority_score": 68,
+      "review_action": null,
+      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement, while routing social fragments, event remarks, and linked-content edge cases to human review."
+    },
+    {
+      "workflow_id": "ria-marketing-rule-review",
+      "workflow_name": "RIA marketing-rule review",
+      "step_id": "step-03-flag-special-content",
+      "step_name": "Flag testimonials, ratings, and performance content",
+      "build_priority_score": 71,
+      "review_action": null,
+      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but treat OCR or richer media parsing as an enhancement layer rather than a blocker to human-confirmed review."
+    },
+    {
+      "workflow_id": "ria-marketing-rule-review",
+      "workflow_name": "RIA marketing-rule review",
+      "step_id": "step-05-draft-review-memo-and-remediation",
+      "step_name": "Draft the review memo and remediation path",
+      "build_priority_score": 72,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call and let memo style live in firm-specific templates."
+    },
+    {
+      "workflow_id": "ria-annual-adv-update",
+      "workflow_name": "RIA annual Form ADV update",
+      "step_id": "step-02-reconcile-registration-basis-and-profile-fields",
+      "step_name": "Reconcile registration basis and profile fields",
+      "build_priority_score": 73,
+      "review_action": null,
+      "build_implication": "Build assistive comparison tooling that flags changed eligibility and profile fields, but keep the final registration-basis conclusion with a reviewer."
+    },
+    {
+      "workflow_id": "ria-annual-adv-update",
+      "workflow_name": "RIA annual Form ADV update",
+      "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+      "step_name": "Reconcile brochure and material-change disclosures",
+      "build_priority_score": 72,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build redline and change-detection support for brochure sections, but keep final narrative judgment and disclosure calls in a reviewer-confirmed assist lane."
+    },
+    {
+      "workflow_id": "ria-annual-adv-update",
+      "workflow_name": "RIA annual Form ADV update",
+      "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+      "step_name": "Prepare the readiness memo and exception list",
+      "build_priority_score": 74,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build memo-drafting and issue-rollup support, but keep reviewer confirmation prominent because this step still packages judgment for the signer."
+    },
+    {
+      "workflow_id": "ria-code-of-ethics-exception-review",
+      "workflow_name": "RIA code-of-ethics personal trading exception review",
+      "step_id": "step-02-confirm-access-person-scope",
+      "step_name": "Confirm access-person scope and reporting obligations",
+      "build_priority_score": 67,
+      "review_action": null,
+      "build_implication": "Build a reviewer-visible access-person classifier that flags edge cases and records the basis for inclusion or exclusion instead of making hidden scope decisions."
+    },
+    {
+      "workflow_id": "ria-code-of-ethics-exception-review",
+      "workflow_name": "RIA code-of-ethics personal trading exception review",
+      "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+      "step_name": "Review trades, preclearance, and restricted-list exceptions",
+      "build_priority_score": 70,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build a reviewer workspace that assembles restricted-list, preclearance, and client-trade context for each flag instead of auto-concluding that every hit is a violation."
+    },
+    {
+      "workflow_id": "ria-code-of-ethics-exception-review",
+      "workflow_name": "RIA code-of-ethics personal trading exception review",
+      "step_id": "step-05-draft-exception-memo-and-remediation",
+      "step_name": "Draft the exception memo and remediation package",
+      "build_priority_score": 66,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build reviewer-editable memo drafts and remediation suggestions, but keep conclusions, tone, and any disclosure call fully in human hands."
+    }
+  ],
+  "pilot_steps": [
+    {
+      "workflow_id": "ria-marketing-rule-review",
+      "workflow_name": "RIA marketing-rule review",
+      "step_id": "step-05-draft-review-memo-and-remediation",
+      "step_name": "Draft the review memo and remediation path",
+      "build_priority_score": 72,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call and let memo style live in firm-specific templates."
+    },
+    {
+      "workflow_id": "ria-annual-adv-update",
+      "workflow_name": "RIA annual Form ADV update",
+      "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+      "step_name": "Prepare the readiness memo and exception list",
+      "build_priority_score": 74,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build memo-drafting and issue-rollup support, but keep reviewer confirmation prominent because this step still packages judgment for the signer."
+    },
+    {
+      "workflow_id": "ria-code-of-ethics-exception-review",
+      "workflow_name": "RIA code-of-ethics personal trading exception review",
+      "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+      "step_name": "Review trades, preclearance, and restricted-list exceptions",
+      "build_priority_score": 70,
+      "review_action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high.",
+      "build_implication": "Build a reviewer workspace that assembles restricted-list, preclearance, and client-trade context for each flag instead of auto-concluding that every hit is a violation."
+    }
+  ],
+  "shared_contract": {
+    "common_step_fields": [
+      "artifacts",
+      "build_implication",
+      "build_priority_score",
+      "confidence",
+      "dimension_scores",
+      "evidence_notes",
+      "gating_reason",
+      "hard_human_gate",
+      "human_owner_role",
+      "mode_scores",
+      "ranked_modes",
+      "recommendation",
+      "review",
+      "source_artifact_path",
+      "step_description",
+      "step_id",
+      "step_name",
+      "step_order",
+      "unknowns",
+      "workflow_id",
+      "workflow_name"
+    ],
+    "common_review_fields": [
+      "artifact_count",
+      "confidence_breakdown",
+      "covered_dimensions",
+      "decision_rationale",
+      "evidence_note_count",
+      "missing_dimensions",
+      "read_only_ui_ready",
+      "review_actions",
+      "source_count",
+      "trust_grade",
+      "trust_score",
+      "unknown_count"
+    ],
+    "common_artifact_fields": [
+      "artifact_id",
+      "artifact_type",
+      "name"
+    ],
+    "common_evidence_fields": [
+      "claim",
+      "source_id",
+      "source_title",
+      "source_url",
+      "supports_dimensions"
+    ]
+  },
+  "shared_jobs_to_be_done": [
+    {
+      "job_id": "understand-why-this-step-needs-review",
+      "job": "Show why the selected step is in the assist lane, not the automate or keep-human lane.",
+      "backed_by_fields": [
+        "mode_scores",
+        "ranked_modes",
+        "confidence",
+        "review.decision_rationale",
+        "review.review_actions"
+      ]
+    },
+    {
+      "job_id": "inspect-evidence-and-linked-artifacts",
+      "job": "Let the reviewer inspect the evidence notes, supporting artifacts, and score rationales without leaving the step context.",
+      "backed_by_fields": [
+        "artifacts",
+        "evidence_notes",
+        "dimension_scores",
+        "build_implication"
+      ]
+    },
+    {
+      "job_id": "edit-the-draft-or-rationale",
+      "job": "Support reviewer edits to the memo, classification basis, or exception framing before anything moves forward.",
+      "backed_by_fields": [
+        "step_description",
+        "review.decision_rationale",
+        "build_implication"
+      ]
+    },
+    {
+      "job_id": "record-reviewer-outcome",
+      "job": "Capture a visible reviewer outcome such as confirm, revise, or escalate, along with the reason for that choice.",
+      "backed_by_fields": [
+        "review.review_actions",
+        "human_owner_role",
+        "hard_human_gate"
+      ]
+    }
+  ],
+  "v1_sections": [
+    {
+      "section_id": "queue",
+      "title": "Assist queue",
+      "purpose": "Prioritize assist-lane steps across the locked workflows by build priority and reviewer caution.",
+      "uses_fields": [
+        "workflow_id",
+        "step_id",
+        "step_name",
+        "build_priority_score",
+        "review.review_actions"
+      ]
+    },
+    {
+      "section_id": "context",
+      "title": "Selected step context",
+      "purpose": "Explain the workflow, owner, step description, and why the product currently recommends assist.",
+      "uses_fields": [
+        "workflow_name",
+        "human_owner_role",
+        "step_description",
+        "mode_scores",
+        "review.decision_rationale"
+      ]
+    },
+    {
+      "section_id": "evidence",
+      "title": "Evidence and artifacts",
+      "purpose": "Keep the source-backed evidence, linked artifacts, and score rationales visible while the reviewer works.",
+      "uses_fields": [
+        "artifacts",
+        "evidence_notes",
+        "dimension_scores",
+        "review.covered_dimensions"
+      ]
+    },
+    {
+      "section_id": "draft",
+      "title": "Draft and rationale workspace",
+      "purpose": "Give the reviewer one place to edit the classification basis, disclosure call, or memo framing before they decide how to proceed.",
+      "uses_fields": [
+        "build_implication",
+        "review.decision_rationale",
+        "review.confidence_breakdown"
+      ]
+    },
+    {
+      "section_id": "decision",
+      "title": "Reviewer outcome",
+      "purpose": "Capture confirm, revise, or escalate outcomes with an explicit reason and prepare a package for the next human gate when needed.",
+      "uses_fields": [
+        "review.review_actions",
+        "hard_human_gate",
+        "human_owner_role"
+      ]
+    }
+  ],
+  "explicit_non_goals": [
+    "Do not collapse the final supervisory step into the workbench; that remains approval support and audit traceability only.",
+    "Do not turn this into a workflow router or a multi-workflow dashboard before the assist-lane interaction model is proven.",
+    "Do not add autonomous reviewer outcomes in v1; the workbench should prepare and record human judgment, not replace it."
+  ],
+  "acceptance_signals": [
+    "A reviewer can open any pilot assist step and immediately see why it needs review.",
+    "A reviewer can inspect all source-backed evidence and linked artifacts without leaving the selected step.",
+    "A reviewer can edit the working rationale or draft output before recording an outcome.",
+    "A reviewer can explicitly confirm, revise, or escalate the step with a written reason.",
+    "The resulting package can be handed to the final human gate without adding hidden logic."
+  ],
+  "reviewer_confirmation_pattern": {
+    "steps_requiring_explicit_confirmation": [
+      {
+        "workflow_id": "ria-marketing-rule-review",
+        "step_id": "step-05-draft-review-memo-and-remediation",
+        "step_name": "Draft the review memo and remediation path",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "workflow_id": "ria-annual-adv-update",
+        "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+        "step_name": "Reconcile brochure and material-change disclosures",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "workflow_id": "ria-annual-adv-update",
+        "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+        "step_name": "Prepare the readiness memo and exception list",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "workflow_id": "ria-code-of-ethics-exception-review",
+        "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step_name": "Review trades, preclearance, and restricted-list exceptions",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "workflow_id": "ria-code-of-ethics-exception-review",
+        "step_id": "step-05-draft-exception-memo-and-remediation",
+        "step_name": "Draft the exception memo and remediation package",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      }
+    ],
+    "count": 5
+  }
+}
