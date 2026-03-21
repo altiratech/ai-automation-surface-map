@@ -1,0 +1,1308 @@
+{
+  "artifact_id": "ria_annual_adv_update_surface_map",
+  "artifact_version": "1.0",
+  "generated_at": "2026-03-21T11:27:31Z",
+  "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_annual_adv_update",
+  "workflow": {
+    "workflow_id": "ria-annual-adv-update",
+    "workflow_name": "RIA annual Form ADV update",
+    "domain": "RIA compliance operations",
+    "persona": "Internal product strategist mapping the annual updating amendment workflow used by a compliance or operations team",
+    "entry_condition": "The adviser is approaching its annual updating amendment deadline and needs to refresh Form ADV, brochure disclosures, and filing readiness materials.",
+    "completion_condition": "The annual updating amendment is submitted, brochure and notice-filing follow-ups are queued or completed, and the filing package is archived.",
+    "workflow_notes": [
+      "This repo still treats each workflow slice as a locked artifact, not a multi-workflow product surface.",
+      "This second slice stays inside RIA compliance but changes the work shape from pre-publication marketing review to periodic filing readiness.",
+      "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
+      "Source evidence is limited to SEC instructions, staff guidance FAQs, risk alerts, and rulemaking releases.",
+      "Firm-specific routing, counsel involvement, and filing-calendar ownership are treated as local configuration, not unresolved scoring uncertainty."
+    ]
+  },
+  "observed_inputs": {
+    "source_count": 7,
+    "artifact_count": 10,
+    "step_count": 7,
+    "note": "Source and artifact inventories are observed or curated workflow inputs. Scores and recommendations are inferred from those inputs."
+  },
+  "scoring_config": {
+    "config_id": "ria_annual_adv_update_v1",
+    "version": "1.0",
+    "dimensions": [
+      {
+        "key": "automation_fit",
+        "label": "Automation fit",
+        "description": "Higher means the step is structured, rules-based, and technically repeatable."
+      },
+      {
+        "key": "human_signoff_need",
+        "label": "Human sign-off need",
+        "description": "Higher means a named human owner should retain final authority for the step."
+      },
+      {
+        "key": "liability_asymmetry",
+        "label": "Liability asymmetry",
+        "description": "Higher means the downside of a wrong answer is materially larger than the efficiency gain."
+      },
+      {
+        "key": "evidence_strength",
+        "label": "Evidence strength",
+        "description": "Higher means the step can be anchored in explicit source material, artifacts, and traceable checks."
+      }
+    ],
+    "gates": {
+      "automate_max_human_signoff": 55,
+      "automate_max_liability": 55,
+      "automate_min_evidence": 60,
+      "keep_human_min_human_signoff": 85,
+      "keep_human_min_liability": 80
+    },
+    "review_thresholds": {
+      "min_source_count_per_step": 3,
+      "min_dimension_coverage_pct": 100,
+      "min_step_trust_score_for_read_only_ui": 70,
+      "min_workflow_trust_score_for_read_only_ui": 75
+    }
+  },
+  "source_inventory": [
+    {
+      "source_id": "sec_form_adv_form_2024",
+      "title": "Form ADV",
+      "source_type": "SEC form",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2024-07",
+      "url": "https://www.sec.gov/files/formadv.pdf",
+      "summary": "States that Form ADV filing is mandatory, publicly available through IARD, required annually within 90 days of fiscal year end, and subject to federal liability for intentional misstatements or omissions."
+    },
+    {
+      "source_id": "sec_form_adv_iard_faq_2023",
+      "title": "Frequently Asked Questions on Form ADV and IARD",
+      "source_type": "SEC staff guidance FAQ",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2023-10-26",
+      "url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+      "summary": "Explains annual versus other-than-annual amendments, filing-fee funding, notice-filing mechanics, handling mistaken filing types, and when advisers must switch registration status after reporting ineligibility."
+    },
+    {
+      "source_id": "sec_form_adv_instructions_2024",
+      "title": "Form ADV - General Instructions",
+      "source_type": "SEC form instructions",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2024-07",
+      "url": "https://www.sec.gov/files/formadv-instructions.pdf",
+      "summary": "Explains the annual updating amendment deadline, full-form update requirement, brochure material-change filing, other-than-annual amendment triggers, and electronic brochure filing through IARD."
+    },
+    {
+      "source_id": "sec_form_adv_part_2_faq_2011",
+      "title": "Staff Responses to Questions About Part 2 of Form ADV",
+      "source_type": "SEC staff guidance FAQ",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2011-03-18",
+      "url": "https://www.sec.gov/divisions/investment/form-adv-part-2-faq.htm",
+      "summary": "Explains how advisers should file and deliver updated brochures, including annual updating amendment brochure obligations, material-change disclosures, searchable PDF filing, and delivery timing to existing clients."
+    },
+    {
+      "source_id": "sec_form_adv_small_entity_guide_2010",
+      "title": "Amendments to Form ADV",
+      "source_type": "SEC small entity compliance guide",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2010-07-28",
+      "url": "https://www.sec.gov/files/rules/final/2010/ia-3060-secg.htm",
+      "summary": "Summarizes the 2010 Form ADV Part 2 changes, including annual summary-of-material-change obligations, plain-English brochure disclosure topics, electronic brochure filing, and delivery expectations."
+    },
+    {
+      "source_id": "sec_ia_compliance_topics_2017",
+      "title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+      "source_type": "SEC risk alert",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2017-02-07",
+      "url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-5-most-frequent-ia-compliance-topics",
+      "summary": "Highlights common adviser deficiencies including inaccurate or untimely regulatory filings, stale compliance manuals, and weak annual-review processes."
+    },
+    {
+      "source_id": "sec_internet_adviser_reforms_2024",
+      "title": "SEC Adopts Reforms Relating to Investment Advisers Operating Exclusively Through the Internet",
+      "source_type": "SEC press release",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2024-03-27",
+      "url": "https://www.sec.gov/newsroom/press-releases/2024-42",
+      "summary": "Explains the amended internet-adviser exemption, including the need to update Form ADV with an eligibility representation and the consequences if a firm no longer qualifies for SEC registration on that basis."
+    }
+  ],
+  "artifact_inventory": [
+    {
+      "artifact_id": "annual_data_request",
+      "name": "Annual amendment input checklist",
+      "artifact_type": "intake_packet",
+      "origin": "representative_internal_work_product",
+      "description": "Structured request for entity changes, office data, websites, social links, conflicts, disciplinary events, and other annual filing inputs.",
+      "step_ids": [
+        "step-01-assemble-annual-amendment-packet",
+        "step-02-reconcile-registration-basis-and-profile-fields"
+      ]
+    },
+    {
+      "artifact_id": "aum_and_eligibility_workpaper",
+      "name": "Regulatory AUM and eligibility workpaper",
+      "artifact_type": "eligibility_support",
+      "origin": "representative_internal_work_product",
+      "description": "Calculation workbook and notes supporting SEC or state registration eligibility, internet-adviser status, and any switch or withdrawal implications.",
+      "step_ids": [
+        "step-01-assemble-annual-amendment-packet",
+        "step-02-reconcile-registration-basis-and-profile-fields",
+        "step-04-draft-annual-updating-amendment-and-notice-checklist",
+        "step-05-prepare-readiness-memo-and-exception-list"
+      ]
+    },
+    {
+      "artifact_id": "brochure_redline",
+      "name": "Brochure redline and summary of material changes",
+      "artifact_type": "brochure_draft",
+      "origin": "representative_internal_work_product",
+      "description": "Draft Part 2A updates, redlines, and the annual summary of material changes prepared for review and filing.",
+      "step_ids": [
+        "step-03-reconcile-brochure-and-material-change-disclosures",
+        "step-04-draft-annual-updating-amendment-and-notice-checklist",
+        "step-05-prepare-readiness-memo-and-exception-list",
+        "step-07-archive-receipts-delivery-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "delivery_and_retention_log",
+      "name": "Delivery and retention log",
+      "artifact_type": "books_and_records_bundle",
+      "origin": "representative_internal_work_product",
+      "description": "Evidence of brochure delivery or offer, retention metadata, and queued post-filing follow-up tasks.",
+      "step_ids": [
+        "step-07-archive-receipts-delivery-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "disciplinary_and_conflicts_log",
+      "name": "Disciplinary and conflicts tracker",
+      "artifact_type": "disclosure_support",
+      "origin": "representative_internal_work_product",
+      "description": "Tracker of disciplinary events, conflicts, soft-dollar arrangements, compensation changes, and other disclosure-sensitive developments.",
+      "step_ids": [
+        "step-03-reconcile-brochure-and-material-change-disclosures",
+        "step-05-prepare-readiness-memo-and-exception-list"
+      ]
+    },
+    {
+      "artifact_id": "filing_readiness_memo",
+      "name": "Annual filing readiness memo",
+      "artifact_type": "review_output",
+      "origin": "representative_internal_work_product",
+      "description": "Memo summarizing changes, unresolved issues, delivery obligations, and recommendation on whether the annual amendment is ready to file.",
+      "step_ids": [
+        "step-05-prepare-readiness-memo-and-exception-list",
+        "step-06-authorize-and-submit-annual-amendment"
+      ]
+    },
+    {
+      "artifact_id": "firm_profile_tracker",
+      "name": "Current firm profile tracker",
+      "artifact_type": "entity_profile",
+      "origin": "representative_internal_work_product",
+      "description": "Current legal-entity details, office roster, website and social-media list, and ownership or control changes since the last filing.",
+      "step_ids": [
+        "step-01-assemble-annual-amendment-packet",
+        "step-02-reconcile-registration-basis-and-profile-fields",
+        "step-04-draft-annual-updating-amendment-and-notice-checklist"
+      ]
+    },
+    {
+      "artifact_id": "iard_submission_receipts",
+      "name": "IARD submission receipts and fee confirmations",
+      "artifact_type": "filing_receipt",
+      "origin": "representative_internal_work_product",
+      "description": "Accepted filing receipt, submission timestamp, fee confirmations, and any returned or corrected filing records.",
+      "step_ids": [
+        "step-06-authorize-and-submit-annual-amendment",
+        "step-07-archive-receipts-delivery-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "notice_filing_matrix",
+      "name": "State notice-filing and fee matrix",
+      "artifact_type": "filing_support",
+      "origin": "representative_internal_work_product",
+      "description": "State-by-state notice-filing requirements, IARD funding needs, and expected fees tied to the annual amendment cycle.",
+      "step_ids": [
+        "step-04-draft-annual-updating-amendment-and-notice-checklist",
+        "step-06-authorize-and-submit-annual-amendment",
+        "step-07-archive-receipts-delivery-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "prior_adv_export",
+      "name": "Prior Form ADV and brochure export",
+      "artifact_type": "prior_filing_record",
+      "origin": "representative_internal_work_product",
+      "description": "The most recent filed Form ADV and brochure package used as the comparison baseline for the annual update.",
+      "step_ids": [
+        "step-01-assemble-annual-amendment-packet",
+        "step-02-reconcile-registration-basis-and-profile-fields",
+        "step-03-reconcile-brochure-and-material-change-disclosures",
+        "step-04-draft-annual-updating-amendment-and-notice-checklist"
+      ]
+    }
+  ],
+  "summary": {
+    "mode_counts": {
+      "automate": 3,
+      "assist": 3,
+      "keep-human": 1
+    },
+    "first_build_wedge": "Automate the annual filing mechanics, assist the disclosure-heavy reconciliation work, and keep final filing execution human.",
+    "highest_priority_build_step": {
+      "step_id": "step-04-draft-annual-updating-amendment-and-notice-checklist",
+      "step_name": "Draft the annual updating amendment and notice checklist",
+      "recommendation": "automate",
+      "build_priority_score": 84
+    },
+    "hard_guardrail_step": {
+      "step_id": "step-06-authorize-and-submit-annual-amendment",
+      "step_name": "Authorize and submit the annual amendment",
+      "recommendation": "keep-human",
+      "build_priority_score": 90
+    },
+    "lowest_confidence_step": {
+      "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+      "step_name": "Reconcile brochure and material-change disclosures",
+      "confidence": 0.5
+    },
+    "blocked_pattern": "Do not ship autonomous annual amendment certification or IARD submission for this workflow in slice 2."
+  },
+  "trust_summary": {
+    "workflow_trust_score": 84,
+    "workflow_trust_grade": "B",
+    "read_only_ui_ready": true,
+    "weakest_step": {
+      "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+      "trust_score": 82
+    },
+    "review_queue": [
+      {
+        "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+        "priority": "high",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+        "priority": "high",
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+      },
+      {
+        "step_id": "step-06-authorize-and-submit-annual-amendment",
+        "priority": "medium",
+        "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+      }
+    ],
+    "blocking_items": []
+  },
+  "step_results": [
+    {
+      "step_id": "step-01-assemble-annual-amendment-packet",
+      "step_order": 1,
+      "step_name": "Assemble the annual amendment packet",
+      "step_description": "Collect the prior filing, current firm profile, annual input checklist, and eligibility workpapers into one normalized packet before any drafting begins.",
+      "human_owner_role": "Compliance operations analyst",
+      "recommendation": "automate",
+      "mode_scores": {
+        "automate": 81,
+        "assist": 60,
+        "keep-human": 26
+      },
+      "ranked_modes": [
+        "automate",
+        "assist",
+        "keep-human"
+      ],
+      "build_priority_score": 83,
+      "confidence": 0.58,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "annual_data_request",
+          "name": "Annual amendment input checklist",
+          "artifact_type": "intake_packet"
+        },
+        {
+          "artifact_id": "prior_adv_export",
+          "name": "Prior Form ADV and brochure export",
+          "artifact_type": "prior_filing_record"
+        },
+        {
+          "artifact_id": "firm_profile_tracker",
+          "name": "Current firm profile tracker",
+          "artifact_type": "entity_profile"
+        },
+        {
+          "artifact_id": "aum_and_eligibility_workpaper",
+          "name": "Regulatory AUM and eligibility workpaper",
+          "artifact_type": "eligibility_support"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 84,
+          "rationale": "The work is repeated, checklist-driven packet assembly with stable annual input categories."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 28,
+          "rationale": "A reviewer should inspect exceptions, but the packet-building step itself does not need final authority."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 30,
+          "rationale": "Errors can still be caught downstream before filing, so the immediate downside is more about rework than irreversible harm."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 88,
+          "rationale": "The annual packet can be anchored to explicit filing instructions, annual deadlines, and common examination deficiencies."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "The annual updating amendment requires updates across all applicable form parts and schedules, which supports a standardized input packet.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_iard_faq_2023",
+          "source_title": "Frequently Asked Questions on Form ADV and IARD",
+          "source_url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+          "claim": "The annual filing obligation remains separate from other-than-annual amendments, so assembling one clear annual packet reduces filing-type confusion.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_form_2024",
+          "source_title": "Form ADV",
+          "source_url": "https://www.sec.gov/files/formadv.pdf",
+          "claim": "Form ADV is a mandatory annual public filing, which makes complete packet assembly an accuracy-control step rather than optional admin work.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "source_title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-5-most-frequent-ia-compliance-topics",
+          "claim": "The SEC has flagged inaccurate or untimely regulatory filings and stale compliance materials as recurring deficiencies, which favors normalized packet assembly.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build a structured intake lane that requests annual filing inputs, normalizes them into one packet, and highlights missing items before any reviewer time is spent.",
+      "review": {
+        "trust_score": 85,
+        "trust_grade": "A",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 4,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.58,
+          "top_mode_margin": 21,
+          "evidence_strength": 88,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (84) and evidence strength (88) comfortably outweigh human sign-off need (28) and liability asymmetry (30).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": []
+      }
+    },
+    {
+      "step_id": "step-02-reconcile-registration-basis-and-profile-fields",
+      "step_order": 2,
+      "step_name": "Reconcile registration basis and profile fields",
+      "step_description": "Compare current firm facts against Part 1A registration-basis, office, website, social-media, and eligibility fields before drafting the annual amendment.",
+      "human_owner_role": "Compliance manager or CCO",
+      "recommendation": "assist",
+      "mode_scores": {
+        "automate": 60,
+        "assist": 72,
+        "keep-human": 61
+      },
+      "ranked_modes": [
+        "assist",
+        "keep-human",
+        "automate"
+      ],
+      "build_priority_score": 73,
+      "confidence": 0.53,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "annual_data_request",
+          "name": "Annual amendment input checklist",
+          "artifact_type": "intake_packet"
+        },
+        {
+          "artifact_id": "prior_adv_export",
+          "name": "Prior Form ADV and brochure export",
+          "artifact_type": "prior_filing_record"
+        },
+        {
+          "artifact_id": "firm_profile_tracker",
+          "name": "Current firm profile tracker",
+          "artifact_type": "entity_profile"
+        },
+        {
+          "artifact_id": "aum_and_eligibility_workpaper",
+          "name": "Regulatory AUM and eligibility workpaper",
+          "artifact_type": "eligibility_support"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 64,
+          "rationale": "Many fields are structured comparisons, but eligibility and profile-edge cases still need reviewer interpretation."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 72,
+          "rationale": "A reviewer should confirm registration-basis changes because they can affect SEC versus state status and public disclosure."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 68,
+          "rationale": "A wrong eligibility or profile answer can create registration and disclosure problems that are expensive to unwind."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 88,
+          "rationale": "The work can be tied to explicit instruction-level update triggers, FAQ guidance, and current SEC rule changes."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "The instructions distinguish annual and prompt-update items, which makes the comparison set explicit but still leaves interpretation on material inaccuracies.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_iard_faq_2023",
+          "source_title": "Frequently Asked Questions on Form ADV and IARD",
+          "source_url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+          "claim": "The FAQ explains that advisers reporting ineligibility on the annual amendment must switch registration within 180 days and that other-than-annual amendments do not replace the annual filing.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_internet_adviser_reforms_2024",
+          "source_title": "SEC Adopts Reforms Relating to Investment Advisers Operating Exclusively Through the Internet",
+          "source_url": "https://www.sec.gov/newsroom/press-releases/2024-42",
+          "claim": "Internet advisers now must update Form ADV with an eligibility representation, which creates a live edge case for registration-basis review.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "source_title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-5-most-frequent-ia-compliance-topics",
+          "claim": "The SEC has identified inaccurate regulatory filings as a recurring deficiency, which supports keeping profile-field reconciliation in a reviewer-visible lane.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build assistive comparison tooling that flags changed eligibility and profile fields, but keep the final registration-basis conclusion with a reviewer.",
+      "review": {
+        "trust_score": 84,
+        "trust_grade": "B",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 4,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.53,
+          "top_mode_margin": 11,
+          "evidence_strength": 88,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (64) but still carries meaningful human sign-off need (72) and liability asymmetry (68).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": []
+      }
+    },
+    {
+      "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+      "step_order": 3,
+      "step_name": "Reconcile brochure and material-change disclosures",
+      "step_description": "Review Part 2A narrative disclosures, fee language, conflicts, disciplinary items, and summary of material changes against the firm's current practices.",
+      "human_owner_role": "CCO or senior compliance reviewer",
+      "recommendation": "assist",
+      "mode_scores": {
+        "automate": 55,
+        "assist": 72,
+        "keep-human": 67
+      },
+      "ranked_modes": [
+        "assist",
+        "keep-human",
+        "automate"
+      ],
+      "build_priority_score": 72,
+      "confidence": 0.5,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "prior_adv_export",
+          "name": "Prior Form ADV and brochure export",
+          "artifact_type": "prior_filing_record"
+        },
+        {
+          "artifact_id": "brochure_redline",
+          "name": "Brochure redline and summary of material changes",
+          "artifact_type": "brochure_draft"
+        },
+        {
+          "artifact_id": "disciplinary_and_conflicts_log",
+          "name": "Disciplinary and conflicts tracker",
+          "artifact_type": "disclosure_support"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 58,
+          "rationale": "The disclosure headings are structured, but deciding whether narrative disclosures fairly reflect current practice still requires human judgment."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 79,
+          "rationale": "A senior reviewer should confirm brochure and material-change language because it is client-facing and disclosure-sensitive."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 74,
+          "rationale": "Misstated brochure disclosures can create examination and client-communication problems that outweigh the efficiency gain from blind automation."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 87,
+          "rationale": "The brochure workflow is strongly anchored in Form ADV instructions and SEC Part 2 guidance, even though the writing remains judgment-heavy."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "Annual updating amendments must refresh Part 2A and include the summary of material changes, which gives this review a clear procedural backbone.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "automation_fit"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part_2_faq_2011",
+          "source_title": "Staff Responses to Questions About Part 2 of Form ADV",
+          "source_url": "https://www.sec.gov/divisions/investment/form-adv-part-2-faq.htm",
+          "claim": "The SEC staff explains that the brochure filed with the annual amendment also drives delivery timing to existing clients, which raises the importance of disclosure accuracy.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_small_entity_guide_2010",
+          "source_title": "Amendments to Form ADV",
+          "source_url": "https://www.sec.gov/files/rules/final/2010/ia-3060-secg.htm",
+          "claim": "The guide ties the brochure to plain-English disclosure of fees, conflicts, disciplinary history, and business practices, which keeps this step reviewer-sensitive.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_small_entity_guide_2010",
+          "source_title": "Amendments to Form ADV",
+          "source_url": "https://www.sec.gov/files/rules/final/2010/ia-3060-secg.htm",
+          "claim": "The required Part 2 topic structure means a tool can organize draft comparisons and redlines even though a reviewer still needs to judge the final wording.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build redline and change-detection support for brochure sections, but keep final narrative judgment and disclosure calls in a reviewer-confirmed assist lane.",
+      "review": {
+        "trust_score": 82,
+        "trust_grade": "B",
+        "source_count": 3,
+        "evidence_note_count": 4,
+        "artifact_count": 3,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.5,
+          "top_mode_margin": 5,
+          "evidence_strength": 87,
+          "note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (58) but still carries meaningful human sign-off need (79) and liability asymmetry (74).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+        },
+        "review_actions": [
+          "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        ]
+      }
+    },
+    {
+      "step_id": "step-04-draft-annual-updating-amendment-and-notice-checklist",
+      "step_order": 4,
+      "step_name": "Draft the annual updating amendment and notice checklist",
+      "step_description": "Prefill changed fields, assemble brochure attachments, and generate the annual updating amendment and notice-filing checklist for reviewer confirmation.",
+      "human_owner_role": "Compliance operations analyst",
+      "recommendation": "automate",
+      "mode_scores": {
+        "automate": 81,
+        "assist": 67,
+        "keep-human": 33
+      },
+      "ranked_modes": [
+        "automate",
+        "assist",
+        "keep-human"
+      ],
+      "build_priority_score": 84,
+      "confidence": 0.57,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "prior_adv_export",
+          "name": "Prior Form ADV and brochure export",
+          "artifact_type": "prior_filing_record"
+        },
+        {
+          "artifact_id": "firm_profile_tracker",
+          "name": "Current firm profile tracker",
+          "artifact_type": "entity_profile"
+        },
+        {
+          "artifact_id": "aum_and_eligibility_workpaper",
+          "name": "Regulatory AUM and eligibility workpaper",
+          "artifact_type": "eligibility_support"
+        },
+        {
+          "artifact_id": "brochure_redline",
+          "name": "Brochure redline and summary of material changes",
+          "artifact_type": "brochure_draft"
+        },
+        {
+          "artifact_id": "notice_filing_matrix",
+          "name": "State notice-filing and fee matrix",
+          "artifact_type": "filing_support"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 87,
+          "rationale": "This is structured drafting and checklist generation tied to known items, schedules, and filing mechanics."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 38,
+          "rationale": "A reviewer should validate the staged filing, but the drafting and checklist work itself is largely repeatable."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 40,
+          "rationale": "A bad prefill is still meaningful, but it can be caught before filing if the staged package remains reviewable."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 93,
+          "rationale": "The step can be grounded in explicit form instructions, brochure-filing rules, fee mechanics, and public filing requirements."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "The instructions define the parts and schedules that must be updated in the annual amendment, which makes prefill and checklist generation highly structured.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_iard_faq_2023",
+          "source_title": "Frequently Asked Questions on Form ADV and IARD",
+          "source_url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+          "claim": "The FAQ explains that annual amendment fees and state notice fees must be funded in IARD before submission, which supports a deterministic filing checklist.",
+          "supports_dimensions": [
+            "automation_fit",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part_2_faq_2011",
+          "source_title": "Staff Responses to Questions About Part 2 of Form ADV",
+          "source_url": "https://www.sec.gov/divisions/investment/form-adv-part-2-faq.htm",
+          "claim": "The Part 2 FAQ explains that advisers prepare their own brochure PDF and submit it through IARD, which fits staged document-generation support.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_form_2024",
+          "source_title": "Form ADV",
+          "source_url": "https://www.sec.gov/files/formadv.pdf",
+          "claim": "Because the filing becomes public and is used for regulatory purposes, the drafting lane should emphasize traceable staging rather than hidden automation.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build the first product wedge here: structured field drafting, brochure attachment staging, and fee-aware filing checklists that remain reviewable before submission.",
+      "review": {
+        "trust_score": 85,
+        "trust_grade": "A",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 5,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.57,
+          "top_mode_margin": 14,
+          "evidence_strength": 93,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (87) and evidence strength (93) comfortably outweigh human sign-off need (38) and liability asymmetry (40).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": []
+      }
+    },
+    {
+      "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+      "step_order": 5,
+      "step_name": "Prepare the readiness memo and exception list",
+      "step_description": "Summarize changes, unresolved issues, brochure-delivery obligations, and escalation items into a memo that tells the signer whether the annual amendment is ready to file.",
+      "human_owner_role": "Compliance manager or outsourced compliance lead",
+      "recommendation": "assist",
+      "mode_scores": {
+        "automate": 56,
+        "assist": 74,
+        "keep-human": 67
+      },
+      "ranked_modes": [
+        "assist",
+        "keep-human",
+        "automate"
+      ],
+      "build_priority_score": 74,
+      "confidence": 0.5,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "aum_and_eligibility_workpaper",
+          "name": "Regulatory AUM and eligibility workpaper",
+          "artifact_type": "eligibility_support"
+        },
+        {
+          "artifact_id": "brochure_redline",
+          "name": "Brochure redline and summary of material changes",
+          "artifact_type": "brochure_draft"
+        },
+        {
+          "artifact_id": "disciplinary_and_conflicts_log",
+          "name": "Disciplinary and conflicts tracker",
+          "artifact_type": "disclosure_support"
+        },
+        {
+          "artifact_id": "filing_readiness_memo",
+          "name": "Annual filing readiness memo",
+          "artifact_type": "review_output"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 62,
+          "rationale": "The memo can be scaffolded from structured findings, but the significance and escalation framing still need human judgment."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 78,
+          "rationale": "A reviewer should own the final readiness recommendation because it synthesizes filing, disclosure, and exception judgment."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 77,
+          "rationale": "A weak readiness memo can let a bad filing reach the signer, so the downside remains meaningfully higher than the speed gain."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 86,
+          "rationale": "The memo can be anchored to explicit filing rules, exam observations, brochure-delivery obligations, and the public nature of the filing."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "The instructions specify the annual and prompt-update obligations that the memo should roll up into a filing-readiness recommendation.",
+          "supports_dimensions": [
+            "evidence_strength",
+            "automation_fit"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "source_title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-5-most-frequent-ia-compliance-topics",
+          "claim": "Recurring SEC findings around inaccurate filings and stale annual reviews support keeping the readiness memo explicit and reviewer-visible.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part_2_faq_2011",
+          "source_title": "Staff Responses to Questions About Part 2 of Form ADV",
+          "source_url": "https://www.sec.gov/divisions/investment/form-adv-part-2-faq.htm",
+          "claim": "Brochure filing and delivery timing can create concrete post-filing obligations, so the memo should call out required follow-up rather than treat submission as the end of the job.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_form_2024",
+          "source_title": "Form ADV",
+          "source_url": "https://www.sec.gov/files/formadv.pdf",
+          "claim": "Because intentional misstatements or omissions can carry federal consequences, unresolved exceptions should be clearly surfaced to the accountable signer.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build memo-drafting and issue-rollup support, but keep reviewer confirmation prominent because this step still packages judgment for the signer.",
+      "review": {
+        "trust_score": 82,
+        "trust_grade": "B",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 4,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.5,
+          "top_mode_margin": 7,
+          "evidence_strength": 86,
+          "note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Assist is the right lane because the step is partially structured (62) but still carries meaningful human sign-off need (78) and liability asymmetry (77).",
+          "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
+          "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
+        },
+        "review_actions": [
+          "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        ]
+      }
+    },
+    {
+      "step_id": "step-06-authorize-and-submit-annual-amendment",
+      "step_order": 6,
+      "step_name": "Authorize and submit the annual amendment",
+      "step_description": "The accountable signer reviews the final package, confirms accuracy, authorizes fee-funded submission, and files the annual updating amendment through IARD.",
+      "human_owner_role": "Authorized principal officer or CCO",
+      "recommendation": "keep-human",
+      "mode_scores": {
+        "automate": 32,
+        "assist": 66,
+        "keep-human": 85
+      },
+      "ranked_modes": [
+        "keep-human",
+        "assist",
+        "automate"
+      ],
+      "build_priority_score": 90,
+      "confidence": 0.57,
+      "hard_human_gate": true,
+      "gating_reason": "hard-human-gate",
+      "artifacts": [
+        {
+          "artifact_id": "notice_filing_matrix",
+          "name": "State notice-filing and fee matrix",
+          "artifact_type": "filing_support"
+        },
+        {
+          "artifact_id": "filing_readiness_memo",
+          "name": "Annual filing readiness memo",
+          "artifact_type": "review_output"
+        },
+        {
+          "artifact_id": "iard_submission_receipts",
+          "name": "IARD submission receipts and fee confirmations",
+          "artifact_type": "filing_receipt"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 18,
+          "rationale": "Automation can stage information, but the act of certifying and submitting the filing should not be delegated."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 95,
+          "rationale": "This is the accountable approval and submission point for a regulatory filing."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 93,
+          "rationale": "A wrong submission creates public, regulatory, and potentially enforcement-facing consequences with little upside from removing the signer."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 88,
+          "rationale": "The human gate is strongly grounded in the form instructions, filing mechanics, and the SEC's statements about the filing's consequences."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_form_2024",
+          "source_title": "Form ADV",
+          "source_url": "https://www.sec.gov/files/formadv.pdf",
+          "claim": "Form ADV is mandatory, public, and subject to federal liability for intentional misstatements or omissions, which makes autonomous submission a poor fit.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "Failure to update Form ADV as required can lead to registration consequences, which reinforces the need for a named accountable signer.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_iard_faq_2023",
+          "source_title": "Frequently Asked Questions on Form ADV and IARD",
+          "source_url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+          "claim": "The FAQ ties submission to funded IARD accounts, filing type choices, and registration-status consequences, all of which are reviewer-signoff sensitive.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_iard_faq_2023",
+          "source_title": "Frequently Asked Questions on Form ADV and IARD",
+          "source_url": "https://www.sec.gov/about/divisions-offices/division-investment-management/electronic-filing-investment-advisers-iard/frequently-asked-questions-form-adv-iard",
+          "claim": "Even when a firm has filed interim amendments, the SEC still expects the distinct annual updating amendment, which makes the execution step a conscious filing decision rather than a background sync.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Keep execution and submission human. Product work here should stop at approval support, fee checks, and audit-ready packet assembly.",
+      "review": {
+        "trust_score": 85,
+        "trust_grade": "A",
+        "source_count": 3,
+        "evidence_note_count": 4,
+        "artifact_count": 3,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.57,
+          "top_mode_margin": 19,
+          "evidence_strength": 88,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Keep Human is mandatory because this step is an explicit supervisory approval point.",
+          "why_not_automate": "Automation here should only package context and evidence for the accountable reviewer.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": [
+          "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        ]
+      }
+    },
+    {
+      "step_id": "step-07-archive-receipts-delivery-and-follow-ups",
+      "step_order": 7,
+      "step_name": "Archive receipts, delivery evidence, and follow-ups",
+      "step_description": "Store filing receipts, brochure-delivery evidence, notice-filing confirmations, and queued follow-up tasks in the annual books-and-records package.",
+      "human_owner_role": "Compliance operations analyst",
+      "recommendation": "automate",
+      "mode_scores": {
+        "automate": 78,
+        "assist": 58,
+        "keep-human": 27
+      },
+      "ranked_modes": [
+        "automate",
+        "assist",
+        "keep-human"
+      ],
+      "build_priority_score": 79,
+      "confidence": 0.56,
+      "hard_human_gate": false,
+      "gating_reason": null,
+      "artifacts": [
+        {
+          "artifact_id": "brochure_redline",
+          "name": "Brochure redline and summary of material changes",
+          "artifact_type": "brochure_draft"
+        },
+        {
+          "artifact_id": "notice_filing_matrix",
+          "name": "State notice-filing and fee matrix",
+          "artifact_type": "filing_support"
+        },
+        {
+          "artifact_id": "iard_submission_receipts",
+          "name": "IARD submission receipts and fee confirmations",
+          "artifact_type": "filing_receipt"
+        },
+        {
+          "artifact_id": "delivery_and_retention_log",
+          "name": "Delivery and retention log",
+          "artifact_type": "books_and_records_bundle"
+        }
+      ],
+      "dimension_scores": {
+        "automation_fit": {
+          "label": "Automation fit",
+          "value": 79,
+          "rationale": "This is structured packaging, timestamp capture, and follow-up creation after the filing is complete, but firm-specific recordkeeping variations still matter."
+        },
+        "human_signoff_need": {
+          "label": "Human sign-off need",
+          "value": 28,
+          "rationale": "A person may inspect exceptions, but the default recordkeeping and task-queue work is mechanical."
+        },
+        "liability_asymmetry": {
+          "label": "Liability asymmetry",
+          "value": 30,
+          "rationale": "The main risk is incomplete records or missed delivery tasks, which can usually be corrected if surfaced promptly."
+        },
+        "evidence_strength": {
+          "label": "Evidence strength",
+          "value": 86,
+          "rationale": "Archival and follow-up tasks are well anchored in brochure-delivery guidance, filing instructions, and SEC books-and-records expectations."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_form_adv_instructions_2024",
+          "source_title": "Form ADV - General Instructions",
+          "source_url": "https://www.sec.gov/files/formadv-instructions.pdf",
+          "claim": "The annual amendment workflow includes brochure filing and update obligations, which supports structured capture of receipts and retained records after submission.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part_2_faq_2011",
+          "source_title": "Staff Responses to Questions About Part 2 of Form ADV",
+          "source_url": "https://www.sec.gov/divisions/investment/form-adv-part-2-faq.htm",
+          "claim": "Updated brochures filed with the annual amendment can trigger delivery to existing clients, so post-filing follow-up should be systematically logged.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_small_entity_guide_2010",
+          "source_title": "Amendments to Form ADV",
+          "source_url": "https://www.sec.gov/files/rules/final/2010/ia-3060-secg.htm",
+          "claim": "The SEC's brochure guidance ties annual material-change communication to delivery obligations, which makes delivery evidence part of the annual package rather than an afterthought.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "source_title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+          "source_url": "https://www.sec.gov/compliance/risk-alerts/risk-alert-5-most-frequent-ia-compliance-topics",
+          "claim": "The SEC has highlighted books-and-records and stale compliance processes as common deficiencies, which supports automating archival completeness checks and follow-up creation.",
+          "supports_dimensions": [
+            "automation_fit",
+            "liability_asymmetry"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build automated archival packaging, receipt capture, and follow-up task creation so the filing cycle ends with a clean books-and-records bundle instead of manual cleanup.",
+      "review": {
+        "trust_score": 85,
+        "trust_grade": "A",
+        "source_count": 4,
+        "evidence_note_count": 4,
+        "artifact_count": 4,
+        "covered_dimensions": [
+          "automation_fit",
+          "evidence_strength",
+          "human_signoff_need",
+          "liability_asymmetry"
+        ],
+        "missing_dimensions": [],
+        "unknown_count": 0,
+        "read_only_ui_ready": true,
+        "confidence_breakdown": {
+          "confidence": 0.56,
+          "top_mode_margin": 20,
+          "evidence_strength": 86,
+          "note": "Clear score separation supports the current recommendation."
+        },
+        "decision_rationale": {
+          "why_this_mode": "Automate is the best fit because automation fit (79) and evidence strength (86) comfortably outweigh human sign-off need (28) and liability asymmetry (30).",
+          "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
+          "confidence_note": "Clear score separation supports the current recommendation."
+        },
+        "review_actions": []
+      }
+    }
+  ],
+  "build_decisions": [
+    {
+      "decision_type": "prioritize-automation",
+      "decision": "Build automation around packet assembly, structured field drafting, notice-filing prep, and post-filing archival before expanding reviewer UI.",
+      "step_ids": [
+        "step-04-draft-annual-updating-amendment-and-notice-checklist",
+        "step-01-assemble-annual-amendment-packet",
+        "step-07-archive-receipts-delivery-and-follow-ups"
+      ],
+      "rationale": "These steps are repeated, rules-based filing mechanics with strong instruction-level anchors and lower downside when a human still reviews the final packet."
+    },
+    {
+      "decision_type": "prioritize-assist",
+      "decision": "Build reviewer aids for registration-basis checks, brochure/material-change reconciliation, and readiness memo preparation instead of autonomous filing judgment.",
+      "step_ids": [
+        "step-05-prepare-readiness-memo-and-exception-list",
+        "step-02-reconcile-registration-basis-and-profile-fields",
+        "step-03-reconcile-brochure-and-material-change-disclosures"
+      ],
+      "rationale": "These steps combine structured data with disclosure and eligibility judgment that should stay visible to a compliance reviewer."
+    },
+    {
+      "decision_type": "enforce-human-gate",
+      "decision": "Do not automate final certification or IARD submission in slice 2.",
+      "step_ids": [
+        "step-06-authorize-and-submit-annual-amendment"
+      ],
+      "rationale": "The execution step is a regulatory filing with public-disclosure and misstatement consequences, so automation should only stage evidence for the accountable signer."
+    }
+  ],
+  "explicit_defers": [
+    "No orchestration layer",
+    "No multi-workflow comparison",
+    "No deployment surface",
+    "No reviewer UI beyond this published payload"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "config_id": "ria_annual_adv_update_v1",
+  "version": "1.0",
+  "workflow_id": "ria-annual-adv-update",
+  "dimensions": {
+    "automation_fit": {
+      "label": "Automation fit",
+      "description": "Higher means the step is structured, rules-based, and technically repeatable."
+    },
+    "human_signoff_need": {
+      "label": "Human sign-off need",
+      "description": "Higher means a named human owner should retain final authority for the step."
+    },
+    "liability_asymmetry": {
+      "label": "Liability asymmetry",
+      "description": "Higher means the downside of a wrong answer is materially larger than the efficiency gain."
+    },
+    "evidence_strength": {
+      "label": "Evidence strength",
+      "description": "Higher means the step can be anchored in explicit source material, artifacts, and traceable checks."
+    }
+  },
+  "mode_formulas": {
+    "automate": {
+      "label": "Automate",
+      "terms": {
+        "automation_fit": {
+          "weight": 0.45,
+          "direction": "direct"
+        },
+        "evidence_strength": {
+          "weight": 0.25,
+          "direction": "direct"
+        },
+        "human_signoff_need": {
+          "weight": 0.15,
+          "direction": "inverse"
+        },
+        "liability_asymmetry": {
+          "weight": 0.15,
+          "direction": "inverse"
+        }
+      }
+    },
+    "assist": {
+      "label": "Assist",
+      "terms": {
+        "automation_fit": {
+          "weight": 0.35,
+          "direction": "direct"
+        },
+        "evidence_strength": {
+          "weight": 0.20,
+          "direction": "direct"
+        },
+        "human_signoff_need": {
+          "weight": 0.25,
+          "direction": "direct"
+        },
+        "liability_asymmetry": {
+          "weight": 0.20,
+          "direction": "direct"
+        }
+      }
+    },
+    "keep-human": {
+      "label": "Keep Human",
+      "terms": {
+        "human_signoff_need": {
+          "weight": 0.45,
+          "direction": "direct"
+        },
+        "liability_asymmetry": {
+          "weight": 0.35,
+          "direction": "direct"
+        },
+        "automation_fit": {
+          "weight": 0.10,
+          "direction": "inverse"
+        },
+        "evidence_strength": {
+          "weight": 0.10,
+          "direction": "inverse"
+        }
+      }
+    }
+  },
+  "gates": {
+    "automate_max_human_signoff": 55,
+    "automate_max_liability": 55,
+    "automate_min_evidence": 60,
+    "keep_human_min_human_signoff": 85,
+    "keep_human_min_liability": 80
+  },
+  "review_thresholds": {
+    "min_source_count_per_step": 3,
+    "min_dimension_coverage_pct": 100,
+    "min_step_trust_score_for_read_only_ui": 70,
+    "min_workflow_trust_score_for_read_only_ui": 75
+  }
+}

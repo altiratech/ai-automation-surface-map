@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T08:42:21Z",
+  "generated_at": "2026-03-21T11:27:31Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",

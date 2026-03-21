@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -14,6 +15,69 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = REPO_ROOT / "configs" / "ria_marketing_rule_review.scoring.json"
 DEFAULT_WORKFLOW_PATH = REPO_ROOT / "data" / "ria_marketing_rule_review.workflow.json"
 DEFAULT_OUTPUT_PATH = REPO_ROOT / "artifacts" / "ria_marketing_rule_review.surface_map.json"
+DEFAULT_GENERATED_BY = "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish"
+EXPLICIT_DEFERS = [
+    "No orchestration layer",
+    "No multi-workflow comparison",
+    "No deployment surface",
+    "No reviewer UI beyond this published payload",
+]
+
+
+@dataclass(frozen=True)
+class DecisionTemplate:
+    decision_type: str
+    decision: str
+    rationale: str
+
+
+@dataclass(frozen=True)
+class WorkflowPublishProfile:
+    artifact_id: str
+    first_build_wedge: str
+    blocked_pattern: str
+    decision_templates: dict[str, DecisionTemplate]
+
+
+DEFAULT_PUBLISH_PROFILE = WorkflowPublishProfile(
+    artifact_id="ria_marketing_rule_review_surface_map",
+    first_build_wedge=(
+        "Automate the workflow edges, assist the judgment-heavy middle, and keep final publication approval human."
+    ),
+    blocked_pattern="Do not ship autonomous end-to-end approval or publication for this workflow in slice 1.",
+    decision_templates={
+        "automate": DecisionTemplate(
+            decision_type="prioritize-automation",
+            decision=(
+                "Build automation around intake, substantiation assembly, and archival packaging before any "
+                "reviewer-facing UI."
+            ),
+            rationale=(
+                "These steps scored high on automation fit and evidence strength while staying below the "
+                "configured liability and sign-off gates."
+            ),
+        ),
+        "assist": DecisionTemplate(
+            decision_type="prioritize-assist",
+            decision=(
+                "Build human-in-the-loop review aids for classification, content-flagging, and remediation "
+                "drafting instead of autonomous adjudication."
+            ),
+            rationale=(
+                "These steps benefit from structured guidance, but they still carry meaningful judgment and "
+                "liability that should stay visible to a reviewer."
+            ),
+        ),
+        KEEP_HUMAN: DecisionTemplate(
+            decision_type="enforce-human-gate",
+            decision="Do not build end-to-end autonomous approval or publication in slice 1.",
+            rationale=(
+                "The publication-approval step remains a named human responsibility with asymmetric downside if "
+                "a bad ad is cleared."
+            ),
+        ),
+    },
+)
 
 
 def _timestamp() -> str:
@@ -109,7 +173,7 @@ def _serialize_step_result(scored_step, review, bundle, config) -> dict:
     }
 
 
-def _build_decisions(scored_steps) -> list[dict]:
+def _build_decisions(scored_steps, publish_profile: WorkflowPublishProfile) -> list[dict]:
     automate_steps = sorted(
         (item for item in scored_steps if item.recommendation == "automate"),
         key=lambda item: item.build_priority_score,
@@ -128,30 +192,33 @@ def _build_decisions(scored_steps) -> list[dict]:
 
     decisions: list[dict] = []
     if automate_steps:
+        template = publish_profile.decision_templates["automate"]
         decisions.append(
             {
-                "decision_type": "prioritize-automation",
-                "decision": "Build automation around intake, substantiation assembly, and archival packaging before any reviewer-facing UI.",
+                "decision_type": template.decision_type,
+                "decision": template.decision,
                 "step_ids": [step.step.step_id for step in automate_steps],
-                "rationale": "These steps scored high on automation fit and evidence strength while staying below the configured liability and sign-off gates.",
+                "rationale": template.rationale,
             }
         )
     if assist_steps:
+        template = publish_profile.decision_templates["assist"]
         decisions.append(
             {
-                "decision_type": "prioritize-assist",
-                "decision": "Build human-in-the-loop review aids for classification, content-flagging, and remediation drafting instead of autonomous adjudication.",
+                "decision_type": template.decision_type,
+                "decision": template.decision,
                 "step_ids": [step.step.step_id for step in assist_steps],
-                "rationale": "These steps benefit from structured guidance, but they still carry meaningful judgment and liability that should stay visible to a reviewer.",
+                "rationale": template.rationale,
             }
         )
     if keep_human_steps:
+        template = publish_profile.decision_templates[KEEP_HUMAN]
         decisions.append(
             {
-                "decision_type": "enforce-human-gate",
-                "decision": "Do not build end-to-end autonomous approval or publication in slice 1.",
+                "decision_type": template.decision_type,
+                "decision": template.decision,
                 "step_ids": [step.step.step_id for step in keep_human_steps],
-                "rationale": "The publication-approval step remains a named human responsibility with asymmetric downside if a bad ad is cleared.",
+                "rationale": template.rationale,
             }
         )
     return decisions
@@ -161,6 +228,8 @@ def build_payload(
     *,
     config_path: Path = DEFAULT_CONFIG_PATH,
     workflow_path: Path = DEFAULT_WORKFLOW_PATH,
+    generated_by: str = DEFAULT_GENERATED_BY,
+    publish_profile: WorkflowPublishProfile = DEFAULT_PUBLISH_PROFILE,
 ) -> dict:
     config = load_scoring_config(config_path)
     bundle = load_workflow_bundle(workflow_path)
@@ -190,10 +259,10 @@ def build_payload(
     lowest_confidence = min(scored_steps, key=lambda item: item.confidence)
 
     return {
-        "artifact_id": "ria_marketing_rule_review_surface_map",
+        "artifact_id": publish_profile.artifact_id,
         "artifact_version": "1.0",
         "generated_at": _timestamp(),
-        "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
+        "generated_by": generated_by,
         "workflow": {
             "workflow_id": bundle.workflow.workflow_id,
             "workflow_name": bundle.workflow.workflow_name,
@@ -227,7 +296,7 @@ def build_payload(
         "artifact_inventory": _serialize_artifacts(bundle),
         "summary": {
             "mode_counts": mode_counts,
-            "first_build_wedge": "Automate the workflow edges, assist the judgment-heavy middle, and keep final publication approval human.",
+            "first_build_wedge": publish_profile.first_build_wedge,
             "highest_priority_build_step": {
                 "step_id": highest_priority_build_step.step.step_id,
                 "step_name": highest_priority_build_step.step.step_name,
@@ -245,7 +314,7 @@ def build_payload(
                 "step_name": lowest_confidence.step.step_name,
                 "confidence": lowest_confidence.confidence,
             },
-            "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
+            "blocked_pattern": publish_profile.blocked_pattern,
         },
         "trust_summary": {
             "workflow_trust_score": workflow_review.workflow_trust_score,
@@ -259,13 +328,8 @@ def build_payload(
             "blocking_items": list(workflow_review.blocking_items),
         },
         "step_results": step_results,
-        "build_decisions": _build_decisions(scored_steps),
-        "explicit_defers": [
-            "No orchestration layer",
-            "No multi-workflow comparison",
-            "No deployment surface",
-            "No reviewer UI beyond this published payload"
-        ],
+        "build_decisions": _build_decisions(scored_steps, publish_profile),
+        "explicit_defers": EXPLICIT_DEFERS,
     }
 
 
@@ -274,8 +338,15 @@ def publish(
     config_path: Path = DEFAULT_CONFIG_PATH,
     workflow_path: Path = DEFAULT_WORKFLOW_PATH,
     output_path: Path = DEFAULT_OUTPUT_PATH,
+    generated_by: str = DEFAULT_GENERATED_BY,
+    publish_profile: WorkflowPublishProfile = DEFAULT_PUBLISH_PROFILE,
 ) -> dict:
-    payload = build_payload(config_path=config_path, workflow_path=workflow_path)
+    payload = build_payload(
+        config_path=config_path,
+        workflow_path=workflow_path,
+        generated_by=generated_by,
+        publish_profile=publish_profile,
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload

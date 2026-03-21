@@ -6,6 +6,10 @@ import unittest
 from pathlib import Path
 
 from pipeline.publish import build_payload, publish
+from pipeline.publish_ria_annual_adv_update import (
+    build_payload as build_second_payload,
+    publish as publish_second,
+)
 
 
 class FirstSlicePublishTests(unittest.TestCase):
@@ -91,6 +95,67 @@ class FirstSlicePublishTests(unittest.TestCase):
                 written["trust_summary"]["weakest_step"]["step_id"],
                 {item["step_id"] for item in written["step_results"]},
             )
+            for queue_item in written["trust_summary"]["review_queue"]:
+                self.assertNotEqual(queue_item["action"], "No immediate action required.")
+
+
+class SecondWorkflowPublishTests(unittest.TestCase):
+    def test_second_workflow_uses_all_three_modes_without_broadening_scope(self) -> None:
+        payload = build_second_payload()
+        self.assertEqual(payload["workflow"]["workflow_id"], "ria-annual-adv-update")
+        self.assertEqual(
+            payload["summary"]["mode_counts"],
+            {"automate": 3, "assist": 3, "keep-human": 1},
+        )
+        self.assertIn("annual filing mechanics", payload["summary"]["first_build_wedge"])
+
+    def test_registration_basis_step_uses_current_edge_case_source(self) -> None:
+        payload = build_second_payload()
+        registration_step = next(
+            item
+            for item in payload["step_results"]
+            if item["step_id"] == "step-02-reconcile-registration-basis-and-profile-fields"
+        )
+        self.assertEqual(registration_step["recommendation"], "assist")
+        self.assertGreaterEqual(registration_step["review"]["trust_score"], 80)
+        self.assertIn(
+            "sec_internet_adviser_reforms_2024",
+            {note["source_id"] for note in registration_step["evidence_notes"]},
+        )
+
+    def test_submission_step_stays_human_with_public_filing_support(self) -> None:
+        payload = build_second_payload()
+        submission_step = next(
+            item
+            for item in payload["step_results"]
+            if item["step_id"] == "step-06-authorize-and-submit-annual-amendment"
+        )
+        self.assertEqual(submission_step["recommendation"], "keep-human")
+        self.assertTrue(submission_step["hard_human_gate"])
+        self.assertGreaterEqual(submission_step["review"]["trust_score"], 80)
+        self.assertIn(
+            "sec_form_adv_form_2024",
+            {note["source_id"] for note in submission_step["evidence_notes"]},
+        )
+        self.assertIn(
+            "approval support",
+            submission_step["review"]["review_actions"][-1],
+        )
+
+    def test_second_workflow_publish_writes_expected_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "surface_map_second.json"
+            payload = publish_second(output_path=output_path)
+            self.assertTrue(output_path.exists())
+            written = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(written["artifact_id"], "ria_annual_adv_update_surface_map")
+            self.assertEqual(written["generated_by"], "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_annual_adv_update")
+            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 80)
+            self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
+            for step in written["step_results"]:
+                self.assertEqual(step["review"]["missing_dimensions"], [])
+                self.assertGreaterEqual(step["review"]["source_count"], 3)
+                self.assertEqual(step["review"]["unknown_count"], 0)
             for queue_item in written["trust_summary"]["review_queue"]:
                 self.assertNotEqual(queue_item["action"], "No immediate action required.")
 

@@ -14,13 +14,14 @@ The founding loop is:
 
 ## Current Repo Status
 
-This repo now includes the first locked slice:
+This repo now includes two locked workflow slices:
 - one RIA marketing-rule review workflow
+- one RIA annual Form ADV update workflow
 - one explicit step and artifact model
 - one inspectable Python scoring pipeline
-- one published rationale-backed surface-map payload
+- two published rationale-backed surface-map payloads
 - one trust-review layer that checks source coverage before any UI work
-- one thin read-only React viewer that presents the current payload without changing the scoring core
+- one thin read-only React viewer that presents the current marketing-review payload without changing the scoring core
 
 ## Canonical Build Truth
 
@@ -54,12 +55,18 @@ Treat these docs as authoritative:
 Do not force this into a broad standalone SaaS story.
 Build it as a precise internal decision engine around one workflow at a time.
 
-## First Slice Commands
+## Locked Workflow Commands
 
-Generate the local artifact payload:
+Generate the marketing-rule artifact payload:
 
 ```bash
 /Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish
+```
+
+Generate the annual Form ADV update artifact payload:
+
+```bash
+/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_annual_adv_update
 ```
 
 Run the local verification suite:
@@ -70,6 +77,7 @@ Run the local verification suite:
 
 Published artifact:
 - `artifacts/ria_marketing_rule_review.surface_map.json`
+- `artifacts/ria_annual_adv_update.surface_map.json`
 
 Read-only web viewer:
 
@@ -78,3 +86,7 @@ cd apps/web
 NPM_CONFIG_CACHE=/tmp/npm-cache npm install
 NPM_CONFIG_CACHE=/tmp/npm-cache npm run dev
 ```
+
+Current note:
+- `apps/web` remains a read-only viewer over the marketing-review artifact only.
+- This repo still does not support multi-workflow switching or orchestration in the UI.
