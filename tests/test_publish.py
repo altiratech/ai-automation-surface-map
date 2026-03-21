@@ -14,6 +14,10 @@ from pipeline.publish_ria_code_of_ethics_exception_review import (
     build_payload as build_third_payload,
     publish as publish_third,
 )
+from pipeline.publish_ria_workflow_pattern_summary import (
+    build_payload as build_pattern_payload,
+    publish as publish_pattern_summary,
+)
 
 
 class FirstSlicePublishTests(unittest.TestCase):
@@ -226,6 +230,57 @@ class ThirdWorkflowPublishTests(unittest.TestCase):
                 self.assertEqual(step["review"]["unknown_count"], 0)
             for queue_item in written["trust_summary"]["review_queue"]:
                 self.assertNotEqual(queue_item["action"], "No immediate action required.")
+
+
+class PatternSummaryPublishTests(unittest.TestCase):
+    def test_pattern_summary_captures_all_three_locked_workflows(self) -> None:
+        payload = build_pattern_payload()
+        self.assertEqual(payload["portfolio_scope"]["workflow_count"], 3)
+        self.assertEqual(
+            payload["portfolio_scope"]["workflow_ids"],
+            [
+                "ria-marketing-rule-review",
+                "ria-annual-adv-update",
+                "ria-code-of-ethics-exception-review",
+            ],
+        )
+        self.assertTrue(payload["cross_workflow_observations"]["common_mode_shape"]["shared_by_all"])
+        self.assertTrue(payload["cross_workflow_observations"]["highest_priority_steps_are_buildable"])
+        self.assertTrue(payload["cross_workflow_observations"]["hard_guardrails_are_human"])
+
+    def test_pattern_summary_thesis_matches_current_product_direction(self) -> None:
+        payload = build_pattern_payload()
+        self.assertIn(
+            "not an autonomous compliance operator",
+            payload["product_recommendation"]["thesis"],
+        )
+        self.assertEqual(len(payload["product_patterns"]), 3)
+        self.assertGreaterEqual(payload["cross_workflow_observations"]["average_workflow_trust_score"], 82)
+
+    def test_pattern_summary_publish_writes_expected_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "ria_workflow_pattern_summary.json"
+            payload = publish_pattern_summary(output_path=output_path)
+            self.assertTrue(output_path.exists())
+            written = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(written["artifact_id"], "ria_workflow_pattern_summary")
+            self.assertEqual(
+                written["generated_by"],
+                "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_workflow_pattern_summary",
+            )
+            self.assertEqual(payload["workflow_snapshots"][0]["workflow_id"], "ria-marketing-rule-review")
+            self.assertEqual(
+                written["cross_workflow_observations"]["common_mode_shape"]["mode_counts"],
+                {"automate": 3, "assist": 3, "keep-human": 1},
+            )
+            self.assertGreaterEqual(
+                len(
+                    written["cross_workflow_observations"]["review_queue_pattern"][
+                        "reviewer_confirmation_steps"
+                    ]
+                ),
+                1,
+            )
 
 
 if __name__ == "__main__":

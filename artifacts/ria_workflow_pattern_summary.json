@@ -1,0 +1,306 @@
+{
+  "artifact_id": "ria_workflow_pattern_summary",
+  "artifact_version": "1.0",
+  "generated_at": "2026-03-21T12:54:27Z",
+  "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_workflow_pattern_summary",
+  "portfolio_scope": {
+    "workflow_count": 3,
+    "workflow_ids": [
+      "ria-marketing-rule-review",
+      "ria-annual-adv-update",
+      "ria-code-of-ethics-exception-review"
+    ],
+    "note": "This is a static synthesis of the three locked RIA workflow slices currently committed in the repo."
+  },
+  "workflow_snapshots": [
+    {
+      "workflow_id": "ria-marketing-rule-review",
+      "workflow_name": "RIA marketing-rule review",
+      "artifact_path": "artifacts/ria_marketing_rule_review.surface_map.json",
+      "workflow_trust_score": 82,
+      "mode_counts": {
+        "automate": 3,
+        "assist": 3,
+        "keep-human": 1
+      },
+      "highest_priority_build_step": {
+        "step_id": "step-07-archive-and-monitor",
+        "step_name": "Archive the final package and queue monitoring",
+        "recommendation": "automate",
+        "build_priority_score": 83
+      },
+      "hard_guardrail_step": {
+        "step_id": "step-06-principal-approval",
+        "step_name": "Record principal or CCO approval for publication",
+        "recommendation": "keep-human",
+        "build_priority_score": 92
+      },
+      "weakest_step": {
+        "step_id": "step-01-intake-package",
+        "trust_score": 81
+      },
+      "review_queue": [
+        {
+          "step_id": "step-05-draft-review-memo-and-remediation",
+          "priority": "high",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "step_id": "step-06-principal-approval",
+          "priority": "medium",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        }
+      ]
+    },
+    {
+      "workflow_id": "ria-annual-adv-update",
+      "workflow_name": "RIA annual Form ADV update",
+      "artifact_path": "artifacts/ria_annual_adv_update.surface_map.json",
+      "workflow_trust_score": 84,
+      "mode_counts": {
+        "automate": 3,
+        "assist": 3,
+        "keep-human": 1
+      },
+      "highest_priority_build_step": {
+        "step_id": "step-04-draft-annual-updating-amendment-and-notice-checklist",
+        "step_name": "Draft the annual updating amendment and notice checklist",
+        "recommendation": "automate",
+        "build_priority_score": 84
+      },
+      "hard_guardrail_step": {
+        "step_id": "step-06-authorize-and-submit-annual-amendment",
+        "step_name": "Authorize and submit the annual amendment",
+        "recommendation": "keep-human",
+        "build_priority_score": 90
+      },
+      "weakest_step": {
+        "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+        "trust_score": 82
+      },
+      "review_queue": [
+        {
+          "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+          "priority": "high",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+          "priority": "high",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "step_id": "step-06-authorize-and-submit-annual-amendment",
+          "priority": "medium",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        }
+      ]
+    },
+    {
+      "workflow_id": "ria-code-of-ethics-exception-review",
+      "workflow_name": "RIA code-of-ethics personal trading exception review",
+      "artifact_path": "artifacts/ria_code_of_ethics_exception_review.surface_map.json",
+      "workflow_trust_score": 83,
+      "mode_counts": {
+        "automate": 3,
+        "assist": 3,
+        "keep-human": 1
+      },
+      "highest_priority_build_step": {
+        "step_id": "step-03-reconcile-missing-and-late-reports",
+        "step_name": "Reconcile missing, late, and incomplete reports",
+        "recommendation": "automate",
+        "build_priority_score": 83
+      },
+      "hard_guardrail_step": {
+        "step_id": "step-06-cco-adjudication-and-sanctions-decision",
+        "step_name": "CCO adjudication and sanctions decision",
+        "recommendation": "keep-human",
+        "build_priority_score": 88
+      },
+      "weakest_step": {
+        "step_id": "step-02-confirm-access-person-scope",
+        "trust_score": 82
+      },
+      "review_queue": [
+        {
+          "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+          "priority": "high",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "step_id": "step-05-draft-exception-memo-and-remediation",
+          "priority": "high",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "step_id": "step-06-cco-adjudication-and-sanctions-decision",
+          "priority": "medium",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        }
+      ]
+    }
+  ],
+  "cross_workflow_observations": {
+    "common_mode_shape": {
+      "mode_counts": {
+        "automate": 3,
+        "assist": 3,
+        "keep-human": 1
+      },
+      "shared_by_all": true
+    },
+    "average_workflow_trust_score": 83,
+    "highest_priority_steps_are_buildable": true,
+    "hard_guardrails_are_human": true,
+    "review_queue_pattern": {
+      "reviewer_confirmation_steps": [
+        {
+          "workflow_id": "ria-marketing-rule-review",
+          "step_id": "step-05-draft-review-memo-and-remediation",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-05-draft-exception-memo-and-remediation",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        }
+      ],
+      "approval_support_steps": [
+        {
+          "workflow_id": "ria-marketing-rule-review",
+          "step_id": "step-06-principal-approval",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-06-authorize-and-submit-annual-amendment",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-06-cco-adjudication-and-sanctions-decision",
+          "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
+        }
+      ]
+    }
+  },
+  "product_patterns": [
+    {
+      "pattern_id": "automate-buildable-edge-first",
+      "finding": "Across all three locked workflows, the first build wedge is still a buildable automate step rather than a final reviewer action.",
+      "support": [
+        {
+          "workflow_id": "ria-marketing-rule-review",
+          "step_id": "step-07-archive-and-monitor",
+          "step_name": "Archive the final package and queue monitoring",
+          "recommendation": "automate",
+          "build_priority_score": 83
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-04-draft-annual-updating-amendment-and-notice-checklist",
+          "step_name": "Draft the annual updating amendment and notice checklist",
+          "recommendation": "automate",
+          "build_priority_score": 84
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-03-reconcile-missing-and-late-reports",
+          "step_name": "Reconcile missing, late, and incomplete reports",
+          "recommendation": "automate",
+          "build_priority_score": 83
+        }
+      ],
+      "product_implication": "Build the product around evidence assembly, exception detection, and structured drafting before adding more reviewer-facing surface area."
+    },
+    {
+      "pattern_id": "assist-lane-carries-the-main-caution",
+      "finding": "The recurring caution across workflows sits in the assist lane: judgment-dense middle steps still need strong reviewer confirmation.",
+      "support": [
+        {
+          "workflow_id": "ria-marketing-rule-review",
+          "step_id": "step-05-draft-review-memo-and-remediation",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-03-reconcile-brochure-and-material-change-disclosures",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-05-prepare-readiness-memo-and-exception-list",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-05-draft-exception-memo-and-remediation",
+          "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
+        }
+      ],
+      "product_implication": "The next shared product layer should help reviewers inspect and edit exception calls, not auto-resolve those middle-step judgments."
+    },
+    {
+      "pattern_id": "final-accountable-step-stays-human",
+      "finding": "Each workflow ends with an explicit keep-human supervisory gate even when the rest of the workflow is highly structureable.",
+      "support": [
+        {
+          "workflow_id": "ria-marketing-rule-review",
+          "step_id": "step-06-principal-approval",
+          "step_name": "Record principal or CCO approval for publication",
+          "recommendation": "keep-human",
+          "build_priority_score": 92
+        },
+        {
+          "workflow_id": "ria-annual-adv-update",
+          "step_id": "step-06-authorize-and-submit-annual-amendment",
+          "step_name": "Authorize and submit the annual amendment",
+          "recommendation": "keep-human",
+          "build_priority_score": 90
+        },
+        {
+          "workflow_id": "ria-code-of-ethics-exception-review",
+          "step_id": "step-06-cco-adjudication-and-sanctions-decision",
+          "step_name": "CCO adjudication and sanctions decision",
+          "recommendation": "keep-human",
+          "build_priority_score": 88
+        }
+      ],
+      "product_implication": "Do not build end-to-end autonomous approval, filing, or violation adjudication. Keep the final decision as approval support and audit traceability only."
+    }
+  ],
+  "product_recommendation": {
+    "thesis": "The product is shaping into a compliance evidence and exception-preparation engine, not an autonomous compliance operator.",
+    "next_build_sequence": [
+      "Standardize evidence assembly, exception detection, and structured drafting across locked workflows before adding more UI.",
+      "Build a reviewer workbench for assist-lane steps where confirmation, edits, and rationale visibility matter most.",
+      "Keep the final supervisory step limited to approval support and audit traceability rather than autonomous action."
+    ],
+    "explicit_non_goals": [
+      "Do not build end-to-end autonomous approval, filing, or sanctions decisions.",
+      "Do not widen the UI just to browse more workflows before the shared reviewer pattern is clearer.",
+      "Do not turn the repo into general workflow routing or orchestration yet."
+    ]
+  }
+}
