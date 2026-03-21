@@ -9,7 +9,7 @@
     "workflow_notes": [
       "This first slice models one workflow only.",
       "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
-      "Source evidence is limited to cited SEC guidance, risk alerts, examination priorities, and enforcement releases."
+      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases."
     ]
   },
   "sources": [
@@ -21,6 +21,15 @@
       "published_date": "2021-05-04",
       "url": "https://www.sec.gov/investment/investment-adviser-marketing",
       "summary": "Summarizes the marketing rule's general prohibitions plus conditions for testimonials, endorsements, third-party ratings, and performance advertising."
+    },
+    {
+      "source_id": "sec_marketing_rule_faq_2026",
+      "title": "Marketing Compliance - Frequently Asked Questions",
+      "source_type": "SEC staff guidance FAQ",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2026-01-15",
+      "url": "https://www.sec.gov/rules-regulations/staff-guidance/division-investment-management-frequently-asked-questions/marketing-compliance-frequently-asked-questions",
+      "summary": "Provides staff views on how the marketing rule applies to nuanced issues such as accompanying information, gross-versus-net presentation, portfolio characteristics, and compliance transition expectations."
     },
     {
       "source_id": "sec_marketing_rule_exam_alert_2022",
@@ -486,34 +495,44 @@
       ],
       "source_ids": [
         "sec_small_entity_marketing_guide",
+        "sec_marketing_rule_faq_2026",
         "sec_marketing_rule_observations_2024",
         "sec_exam_priorities_2026"
       ],
       "hard_human_gate": false,
       "dimension_scores": {
         "automation_fit": {
-          "value": 60,
-          "rationale": "Issue drafting is partly templated, but good remediation advice depends on context and judgment."
+          "value": 65,
+          "rationale": "Issue drafting can be scaffolded from recurring deficiency patterns, FAQ-backed issue categories, and artifact checks, even though final phrasing still needs reviewer context."
         },
         "human_signoff_need": {
-          "value": 76,
-          "rationale": "A human should decide whether the explanations and fixes truly cure the problem before approval."
+          "value": 75,
+          "rationale": "A human should still confirm that the proposed explanations and edits actually cure the issue before the item moves to approval."
         },
         "liability_asymmetry": {
-          "value": 78,
-          "rationale": "Bad remediation guidance can create a false sense of safety and push a risky ad closer to publication."
+          "value": 75,
+          "rationale": "Weak remediation guidance can still push a risky ad forward, but this step remains pre-approval and benefits from downstream supervisory review."
         },
         "evidence_strength": {
-          "value": 69,
-          "rationale": "The memo can cite concrete findings, but balancing language and adequacy judgments remain qualitative."
+          "value": 76,
+          "rationale": "The memo can point to explicit rule conditions, staff FAQ interpretations, observed deficiency themes, and substantiation gaps in a traceable way."
         }
       },
       "evidence_notes": [
         {
           "source_id": "sec_small_entity_marketing_guide",
-          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, but applying that frame to borderline claims still needs reviewer judgment.",
+          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, so the memo can be structured around recurring categories before a reviewer finalizes the advice.",
           "supports_dimensions": [
             "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_faq_2026",
+          "claim": "The updated SEC FAQ shows that borderline performance and presentation questions often turn on accompanying information, prominence, and contextual explanation, which fits draft-assist tooling more than autonomous resolution.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
             "evidence_strength"
           ]
         },
@@ -527,7 +546,7 @@
         },
         {
           "source_id": "sec_exam_priorities_2026",
-          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning.",
+          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memo structure and remediation tracking but not autonomous dispositioning.",
           "supports_dimensions": [
             "evidence_strength",
             "human_signoff_need"

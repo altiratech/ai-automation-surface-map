@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T02:38:17Z",
+  "generated_at": "2026-03-21T03:14:24Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",
@@ -13,11 +13,11 @@
     "workflow_notes": [
       "This first slice models one workflow only.",
       "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
-      "Source evidence is limited to cited SEC guidance, risk alerts, examination priorities, and enforcement releases."
+      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases."
     ]
   },
   "observed_inputs": {
-    "source_count": 7,
+    "source_count": 8,
     "artifact_count": 10,
     "step_count": 7,
     "note": "Source and artifact inventories are observed or curated workflow inputs. Scores and recommendations are inferred from those inputs."
@@ -106,6 +106,15 @@
       "published_date": "2023-06-08",
       "url": "https://www.sec.gov/compliance/risk-alerts/examinations-focused-additional-areas-adviser-marketing-rule",
       "summary": "Adds testimonials, endorsements, third-party ratings, and Form ADV alignment to the examination focus areas."
+    },
+    {
+      "source_id": "sec_marketing_rule_faq_2026",
+      "title": "Marketing Compliance - Frequently Asked Questions",
+      "source_type": "SEC staff guidance FAQ",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2026-01-15",
+      "url": "https://www.sec.gov/rules-regulations/staff-guidance/division-investment-management-frequently-asked-questions/marketing-compliance-frequently-asked-questions",
+      "summary": "Provides staff views on how the marketing rule applies to nuanced issues such as accompanying information, gross-versus-net presentation, portfolio characteristics, and compliance transition expectations."
     },
     {
       "source_id": "sec_marketing_rule_observations_2024",
@@ -259,33 +268,33 @@
       "build_priority_score": 91
     },
     "lowest_confidence_step": {
-      "step_id": "step-05-draft-review-memo-and-remediation",
-      "step_name": "Draft the review memo and remediation path",
-      "confidence": 0.38
+      "step_id": "step-02-classify-advertisement",
+      "step_name": "Classify whether the item is an advertisement",
+      "confidence": 0.41
     },
     "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
   },
   "trust_summary": {
-    "workflow_trust_score": 79,
+    "workflow_trust_score": 80,
     "workflow_trust_grade": "B",
     "read_only_ui_ready": true,
     "weakest_step": {
-      "step_id": "step-05-draft-review-memo-and-remediation",
-      "trust_score": 75
+      "step_id": "step-02-classify-advertisement",
+      "trust_score": 76
     },
     "review_queue": [
       {
-        "step_id": "step-05-draft-review-memo-and-remediation",
+        "step_id": "step-02-classify-advertisement",
         "priority": "high",
         "action": "Tighten the rationale or add supporting evidence because the score spread is still narrow."
       },
       {
-        "step_id": "step-02-classify-advertisement",
+        "step_id": "step-06-principal-approval",
         "priority": "medium",
-        "action": "Tighten the rationale or add supporting evidence because the score spread is still narrow."
+        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       },
       {
-        "step_id": "step-06-principal-approval",
+        "step_id": "step-01-intake-package",
         "priority": "medium",
         "action": "Resolve the listed unknowns before turning this step into stronger product logic."
       }
@@ -828,17 +837,17 @@
       "human_owner_role": "Compliance reviewer",
       "recommendation": "assist",
       "mode_scores": {
-        "automate": 51,
-        "assist": 69,
-        "keep-human": 69
+        "automate": 56,
+        "assist": 72,
+        "keep-human": 66
       },
       "ranked_modes": [
         "assist",
         "keep-human",
         "automate"
       ],
-      "build_priority_score": 68,
-      "confidence": 0.38,
+      "build_priority_score": 72,
+      "confidence": 0.45,
       "hard_human_gate": false,
       "gating_reason": null,
       "artifacts": [
@@ -871,23 +880,23 @@
       "dimension_scores": {
         "automation_fit": {
           "label": "Automation fit",
-          "value": 60,
-          "rationale": "Issue drafting is partly templated, but good remediation advice depends on context and judgment."
+          "value": 65,
+          "rationale": "Issue drafting can be scaffolded from recurring deficiency patterns, FAQ-backed issue categories, and artifact checks, even though final phrasing still needs reviewer context."
         },
         "human_signoff_need": {
           "label": "Human sign-off need",
-          "value": 76,
-          "rationale": "A human should decide whether the explanations and fixes truly cure the problem before approval."
+          "value": 75,
+          "rationale": "A human should still confirm that the proposed explanations and edits actually cure the issue before the item moves to approval."
         },
         "liability_asymmetry": {
           "label": "Liability asymmetry",
-          "value": 78,
-          "rationale": "Bad remediation guidance can create a false sense of safety and push a risky ad closer to publication."
+          "value": 75,
+          "rationale": "Weak remediation guidance can still push a risky ad forward, but this step remains pre-approval and benefits from downstream supervisory review."
         },
         "evidence_strength": {
           "label": "Evidence strength",
-          "value": 69,
-          "rationale": "The memo can cite concrete findings, but balancing language and adequacy judgments remain qualitative."
+          "value": 76,
+          "rationale": "The memo can point to explicit rule conditions, staff FAQ interpretations, observed deficiency themes, and substantiation gaps in a traceable way."
         }
       },
       "evidence_notes": [
@@ -895,9 +904,20 @@
           "source_id": "sec_small_entity_marketing_guide",
           "source_title": "Investment Adviser Marketing",
           "source_url": "https://www.sec.gov/investment/investment-adviser-marketing",
-          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, but applying that frame to borderline claims still needs reviewer judgment.",
+          "claim": "The marketing rule's specific conditions create a reusable frame for issue spotting, so the memo can be structured around recurring categories before a reviewer finalizes the advice.",
           "supports_dimensions": [
             "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_marketing_rule_faq_2026",
+          "source_title": "Marketing Compliance - Frequently Asked Questions",
+          "source_url": "https://www.sec.gov/rules-regulations/staff-guidance/division-investment-management-frequently-asked-questions/marketing-compliance-frequently-asked-questions",
+          "claim": "The updated SEC FAQ shows that borderline performance and presentation questions often turn on accompanying information, prominence, and contextual explanation, which fits draft-assist tooling more than autonomous resolution.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need",
             "evidence_strength"
           ]
         },
@@ -915,7 +935,7 @@
           "source_id": "sec_exam_priorities_2026",
           "source_title": "SEC Division of Examinations Announces 2026 Priorities",
           "source_url": "https://www.sec.gov/newsroom/press-releases/2025-132-sec-division-examinations-announces-2026-priorities",
-          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memos but not autonomous dispositioning.",
+          "claim": "The SEC expects stronger compliance programs and supervisory readiness, which favors consistent memo structure and remediation tracking but not autonomous dispositioning.",
           "supports_dimensions": [
             "evidence_strength",
             "human_signoff_need"
@@ -927,10 +947,10 @@
       ],
       "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call.",
       "review": {
-        "trust_score": 75,
+        "trust_score": 80,
         "trust_grade": "B",
-        "source_count": 3,
-        "evidence_note_count": 3,
+        "source_count": 4,
+        "evidence_note_count": 4,
         "artifact_count": 5,
         "covered_dimensions": [
           "automation_fit",
@@ -942,18 +962,17 @@
         "unknown_count": 1,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
-          "confidence": 0.38,
-          "top_mode_margin": 0,
-          "evidence_strength": 69,
-          "note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+          "confidence": 0.45,
+          "top_mode_margin": 6,
+          "evidence_strength": 76,
+          "note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
         "decision_rationale": {
-          "why_this_mode": "Assist is the right lane because the step is partially structured (60) but still carries meaningful human sign-off need (76) and liability asymmetry (78).",
+          "why_this_mode": "Assist is the right lane because the step is partially structured (65) but still carries meaningful human sign-off need (75) and liability asymmetry (75).",
           "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
-          "confidence_note": "Low separation between the top two modes means this step still needs explicit reviewer judgment."
+          "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
         "review_actions": [
-          "Tighten the rationale or add supporting evidence because the score spread is still narrow.",
           "Resolve the listed unknowns before turning this step into stronger product logic.",
           "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
         ]
@@ -1220,8 +1239,8 @@
       "decision_type": "prioritize-assist",
       "decision": "Build human-in-the-loop review aids for classification, content-flagging, and remediation drafting instead of autonomous adjudication.",
       "step_ids": [
-        "step-03-flag-special-content",
         "step-05-draft-review-memo-and-remediation",
+        "step-03-flag-special-content",
         "step-02-classify-advertisement"
       ],
       "rationale": "These steps benefit from structured guidance, but they still carry meaningful judgment and liability that should stay visible to a reviewer."
