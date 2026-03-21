@@ -2,7 +2,12 @@ import { useState } from "react";
 
 import surfaceMap from "@surface-map";
 
-import type { RecommendationMode, StepResult, SurfaceMapPayload } from "./types";
+import type {
+  RecommendationMode,
+  SourceInventoryItem,
+  StepResult,
+  SurfaceMapPayload,
+} from "./types";
 
 const payload = surfaceMap as SurfaceMapPayload;
 
@@ -46,11 +51,36 @@ function scoreLabel(value: number): string {
   return "weak";
 }
 
+function formatDateLabel(value: string): string {
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(parsed);
+}
+
 function App() {
   const [selectedStepId, setSelectedStepId] = useState(weakestStepId);
   const selectedStep =
     payload.step_results.find((step) => step.step_id === selectedStepId) ??
     payload.step_results[0];
+  const selectedQueueItem = payload.trust_summary.review_queue.find(
+    (item) => item.step_id === selectedStep.step_id,
+  );
+  const sourceLookup = Object.fromEntries(
+    payload.source_inventory.map((source) => [source.source_id, source]),
+  ) as Record<string, SourceInventoryItem>;
+  const isWeakestTrustStep = selectedStep.step_id === weakestStepId;
+  const isLowestConfidenceStep =
+    selectedStep.step_id === payload.summary.lowest_confidence_step.step_id;
+  const primaryReviewAction =
+    selectedQueueItem?.action ??
+    selectedStep.review.review_actions[0] ??
+    "No immediate action required.";
 
   return (
     <div className="page-shell">
@@ -140,6 +170,28 @@ function App() {
             <p className="panel-kicker">Review queue</p>
             <h2>What still deserves attention</h2>
           </div>
+          <div className="queue-summary">
+            <button
+              className="queue-summary-card"
+              type="button"
+              onClick={() => setSelectedStepId(payload.trust_summary.weakest_step.step_id)}
+            >
+              <span className="callout-label">Weakest trust</span>
+              <strong>{stepNameFor(payload.trust_summary.weakest_step.step_id)}</strong>
+              <p>Trust {payload.trust_summary.weakest_step.trust_score}</p>
+            </button>
+            <button
+              className="queue-summary-card"
+              type="button"
+              onClick={() =>
+                setSelectedStepId(payload.summary.lowest_confidence_step.step_id)
+              }
+            >
+              <span className="callout-label">Lowest confidence</span>
+              <strong>{payload.summary.lowest_confidence_step.step_name}</strong>
+              <p>{formatPercent(payload.summary.lowest_confidence_step.confidence)}</p>
+            </button>
+          </div>
           <ul className="queue-list">
             {payload.trust_summary.review_queue.map((item) => (
               <li key={item.step_id}>
@@ -206,6 +258,15 @@ function App() {
             <span className={`inline-chip ${modeMeta[selectedStep.recommendation].tone}`}>
               {modeMeta[selectedStep.recommendation].label}
             </span>
+            {selectedStep.hard_human_gate ? (
+              <span className="inline-chip mode-keep-human">Hard human gate</span>
+            ) : null}
+            {isWeakestTrustStep ? (
+              <span className="inline-chip neutral-chip">Weakest trust step</span>
+            ) : null}
+            {isLowestConfidenceStep ? (
+              <span className="inline-chip neutral-chip">Lowest confidence step</span>
+            ) : null}
             <span className="inline-chip neutral-chip">
               Build priority {selectedStep.build_priority_score}
             </span>
@@ -215,6 +276,60 @@ function App() {
             <span className="inline-chip neutral-chip">
               Trust {selectedStep.review.trust_score} / {selectedStep.review.trust_grade}
             </span>
+          </div>
+
+          <div className="snapshot-grid">
+            <article className="subpanel emphasis-subpanel">
+              <h3>Fast read</h3>
+              <div className="snapshot-list">
+                <div className="snapshot-row">
+                  <span>Owner</span>
+                  <strong>{selectedStep.human_owner_role}</strong>
+                </div>
+                <div className="snapshot-row">
+                  <span>Primary review action</span>
+                  <p>{primaryReviewAction}</p>
+                </div>
+                <div className="snapshot-row">
+                  <span>Build implication</span>
+                  <p>{selectedStep.build_implication}</p>
+                </div>
+                <div className="snapshot-row">
+                  <span>Queue status</span>
+                  <strong>
+                    {selectedQueueItem
+                      ? `${selectedQueueItem.priority} priority`
+                      : "Not in active review queue"}
+                  </strong>
+                </div>
+              </div>
+            </article>
+
+            <article className="subpanel">
+              <h3>Mode spread</h3>
+              <p className="muted-note">
+                The bar view makes the recommendation easier to inspect when two modes are
+                close.
+              </p>
+              <div className="mode-bar-list">
+                {selectedStep.ranked_modes.map((mode) => (
+                  <div key={mode} className="mode-bar-row">
+                    <div className="mode-bar-head">
+                      <span className={`inline-chip ${modeMeta[mode].tone}`}>
+                        {modeMeta[mode].label}
+                      </span>
+                      <strong>{selectedStep.mode_scores[mode]}</strong>
+                    </div>
+                    <div className="mode-bar-track">
+                      <div
+                        className={`mode-bar-fill ${modeMeta[mode].tone}`}
+                        style={{ width: `${selectedStep.mode_scores[mode]}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
           </div>
 
           <div className="detail-section-grid">
@@ -320,9 +435,21 @@ function App() {
             <ul className="evidence-list">
               {selectedStep.evidence_notes.map((note) => (
                 <li key={`${note.source_id}-${note.claim}`}>
-                  <a href={note.source_url} target="_blank" rel="noreferrer">
-                    {note.source_title}
-                  </a>
+                  <div className="evidence-head">
+                    <a href={note.source_url} target="_blank" rel="noreferrer">
+                      {note.source_title}
+                    </a>
+                    <div className="evidence-meta">
+                      <span className="inline-chip neutral-chip">
+                        {sourceLookup[note.source_id]?.source_type ?? "source"}
+                      </span>
+                      <span className="inline-chip neutral-chip">
+                        {formatDateLabel(
+                          sourceLookup[note.source_id]?.published_date ?? "",
+                        )}
+                      </span>
+                    </div>
+                  </div>
                   <p>{note.claim}</p>
                   <div className="coverage-strip">
                     {note.supports_dimensions.map((dimension) => (

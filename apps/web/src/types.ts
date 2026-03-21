@@ -1,5 +1,15 @@
 export type RecommendationMode = "automate" | "assist" | "keep-human";
 
+export type SourceInventoryItem = {
+  source_id: string;
+  title: string;
+  source_type: string;
+  publisher: string;
+  published_date: string;
+  url: string;
+  summary: string;
+};
+
 export type SurfaceMapPayload = {
   workflow: {
     workflow_id: string;
@@ -10,6 +20,7 @@ export type SurfaceMapPayload = {
     completion_condition: string;
     workflow_notes: string[];
   };
+  source_inventory: SourceInventoryItem[];
   summary: {
     mode_counts: Record<RecommendationMode, number>;
     first_build_wedge: string;

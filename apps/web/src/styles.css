@@ -268,6 +268,23 @@ button {
   gap: 12px;
 }
 
+.queue-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.queue-summary-card {
+  width: 100%;
+  text-align: left;
+  padding: 16px;
+  border: 1px solid rgba(17, 32, 40, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  cursor: pointer;
+}
+
 .queue-item {
   width: 100%;
   text-align: left;
@@ -368,6 +385,13 @@ button {
   margin-top: 16px;
 }
 
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
 .detail-section-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 18px;
@@ -378,10 +402,69 @@ button {
   background: rgba(255, 255, 255, 0.62);
 }
 
+.emphasis-subpanel {
+  background: linear-gradient(180deg, rgba(17, 32, 40, 0.06), rgba(255, 255, 255, 0.72));
+}
+
 .subpanel h3,
 .side-section h3 {
   margin: 0;
   font-size: 1.02rem;
+}
+
+.snapshot-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.snapshot-row {
+  display: grid;
+  gap: 6px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(17, 32, 40, 0.05);
+}
+
+.snapshot-row span {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #52646a;
+}
+
+.snapshot-row p {
+  margin: 0;
+}
+
+.mode-bar-list {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.mode-bar-row {
+  display: grid;
+  gap: 8px;
+}
+
+.mode-bar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mode-bar-track {
+  overflow: hidden;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(17, 32, 40, 0.08);
+}
+
+.mode-bar-fill {
+  height: 100%;
+  border-radius: inherit;
 }
 
 .secondary-heading {
@@ -477,6 +560,17 @@ button {
   text-decoration: none;
 }
 
+.evidence-head {
+  display: grid;
+  gap: 10px;
+}
+
+.evidence-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .evidence-list a:hover {
   text-decoration: underline;
 }
@@ -507,6 +601,8 @@ button {
   }
 
   .mode-summary-grid,
+  .queue-summary,
+  .snapshot-grid,
   .detail-section-grid,
   .trust-metrics {
     grid-template-columns: 1fr;
