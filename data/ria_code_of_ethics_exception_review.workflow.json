@@ -1,0 +1,717 @@
+{
+  "workflow": {
+    "workflow_id": "ria-code-of-ethics-exception-review",
+    "workflow_name": "RIA code-of-ethics personal trading exception review",
+    "domain": "RIA compliance operations",
+    "persona": "Internal product strategist mapping the code-of-ethics exception workflow used by a compliance team reviewing employee personal trading and reporting issues",
+    "entry_condition": "The adviser is running a periodic code-of-ethics review cycle or has received new employee trading, holdings, acknowledgment, or preclearance data that must be checked for exceptions.",
+    "completion_condition": "Exceptions are triaged, any violations or waivers are adjudicated by the CCO, and the resulting records and follow-up actions are archived.",
+    "workflow_notes": [
+      "This repo still treats each workflow slice as a locked artifact, not a multi-workflow product surface.",
+      "This third slice stays inside RIA compliance but changes the work shape again from filing and marketing review into recurring exception monitoring and supervisory adjudication.",
+      "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
+      "Source evidence is limited to SEC rulemaking, risk alerts, form instructions, and examination-priority materials.",
+      "Firm-specific sanction matrices, restricted-list thresholds, and escalation routing are treated as local configuration, not unresolved scoring uncertainty."
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "sec_code_of_ethics_rule_release_2004",
+      "title": "Final Rule: Investment Adviser Codes of Ethics",
+      "source_type": "SEC rule release",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2004-07-02",
+      "url": "https://www.sec.gov/files/rules/final/ia-2256.htm",
+      "summary": "Adopted rule 204A-1 requiring adviser codes of ethics, periodic access-person holdings and transaction reports, pre-approval for IPOs and limited offerings, written acknowledgments, and related recordkeeping."
+    },
+    {
+      "source_id": "sec_personal_trading_compliance_alert_2008",
+      "title": "Compliance Alert (July 2008)",
+      "source_type": "SEC compliance alert",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2008-07",
+      "url": "https://www.sec.gov/about/offices/ocie/complialert0708.htm",
+      "summary": "Highlights common personal-trading deficiencies and effective practices such as duplicate confirms, current restricted lists, documented preclearance, centralized monitoring, annual certifications, and documented exceptions."
+    },
+    {
+      "source_id": "sec_ia_compliance_topics_2017",
+      "title": "The Five Most Frequent Compliance Topics Identified in OCIE Examinations of Investment Advisers",
+      "source_type": "SEC risk alert",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2017-02-07",
+      "url": "https://www.sec.gov/ocie/Article/risk-alert-5-most-frequent-ia-compliance-topics.pdf",
+      "summary": "Identifies the code-of-ethics rule as a frequent examination topic, including failures to identify all access persons and failures to collect or review required holdings and transaction reports on time."
+    },
+    {
+      "source_id": "sec_code_of_ethics_risk_alert_2022",
+      "title": "Investment Adviser MNPI Compliance Issues",
+      "source_type": "SEC risk alert",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2022-04-26",
+      "url": "https://www.sec.gov/files/code-ethics-risk-alert.pdf",
+      "summary": "Describes common code-of-ethics deficiencies, including incomplete access-person identification, missing pre-approval controls, weak review evidence, missing acknowledgments, and employee trading in restricted securities."
+    },
+    {
+      "source_id": "sec_form_adv_part2_2022",
+      "title": "Appendix C Part 2 of Form ADV",
+      "source_type": "SEC form instructions",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2022-08",
+      "url": "https://www.sec.gov/files/form-adv-part2.pdf",
+      "summary": "Requires advisers to describe their code of ethics, offer a copy to clients on request, and explain conflicts created by adviser or related-person personal trading in the same securities recommended to clients."
+    },
+    {
+      "source_id": "sec_exam_priorities_2026",
+      "title": "SEC Division of Examinations Announces 2026 Priorities",
+      "source_type": "SEC press release",
+      "publisher": "U.S. Securities and Exchange Commission",
+      "published_date": "2025-11-17",
+      "url": "https://www.sec.gov/newsroom/press-releases/2025-132-sec-division-examinations-announces-2026-priorities",
+      "summary": "Says examinations will continue to assess the effectiveness of adviser compliance programs, whether policies are implemented and enforced, and whether annual compliance reviews address core conflict and trading risks."
+    }
+  ],
+  "artifacts": [
+    {
+      "artifact_id": "access_person_roster",
+      "name": "Access-person roster and role matrix",
+      "artifact_type": "role_matrix",
+      "origin": "representative_internal_work_product",
+      "description": "Roster of supervised persons, role attributes, related entities, and current access-person designation logic.",
+      "step_ids": [
+        "step-01-assemble-review-packet",
+        "step-02-confirm-access-person-scope",
+        "step-07-archive-decisions-certifications-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "brokerage_feed_map",
+      "name": "Brokerage feed and duplicate-confirm map",
+      "artifact_type": "account_feed_map",
+      "origin": "representative_internal_work_product",
+      "description": "Mapping of employee brokerage accounts, duplicate-confirm delivery, feed coverage, and known manual-reporting gaps.",
+      "step_ids": [
+        "step-01-assemble-review-packet",
+        "step-03-reconcile-missing-and-late-reports",
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions"
+      ]
+    },
+    {
+      "artifact_id": "trade_report_package",
+      "name": "Quarterly transaction and annual holdings package",
+      "artifact_type": "report_packet",
+      "origin": "representative_internal_work_product",
+      "description": "Combined set of quarterly transaction reports, annual holdings reports, initial holdings reports, and supporting account statements.",
+      "step_ids": [
+        "step-01-assemble-review-packet",
+        "step-03-reconcile-missing-and-late-reports",
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step-07-archive-decisions-certifications-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "code_acknowledgment_log",
+      "name": "Code delivery and acknowledgment log",
+      "artifact_type": "certification_log",
+      "origin": "representative_internal_work_product",
+      "description": "Log of code distributions, amendment notices, written acknowledgments, and annual certification status.",
+      "step_ids": [
+        "step-01-assemble-review-packet",
+        "step-03-reconcile-missing-and-late-reports",
+        "step-07-archive-decisions-certifications-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "restricted_list_register",
+      "name": "Restricted-list and watchlist register",
+      "artifact_type": "restricted_list",
+      "origin": "representative_internal_work_product",
+      "description": "Current do-not-trade, watchlist, and blackout-period controls used to screen employee trading activity.",
+      "step_ids": [
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step-05-draft-exception-memo-and-remediation",
+        "step-06-cco-adjudication-and-sanctions-decision"
+      ]
+    },
+    {
+      "artifact_id": "preclearance_log",
+      "name": "IPO, limited-offering, and preclearance request log",
+      "artifact_type": "preclearance_log",
+      "origin": "representative_internal_work_product",
+      "description": "Requests, approvals, denials, expiration dates, and supporting notes for personal-trading preclearance decisions.",
+      "step_ids": [
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step-05-draft-exception-memo-and-remediation",
+        "step-06-cco-adjudication-and-sanctions-decision",
+        "step-07-archive-decisions-certifications-and-follow-ups"
+      ]
+    },
+    {
+      "artifact_id": "exception_queue",
+      "name": "Code-of-ethics exception triage queue",
+      "artifact_type": "exception_queue",
+      "origin": "representative_internal_work_product",
+      "description": "Structured list of missing reports, late acknowledgments, restricted-list hits, unmatched trades, and other flagged exceptions.",
+      "step_ids": [
+        "step-03-reconcile-missing-and-late-reports",
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step-05-draft-exception-memo-and-remediation"
+      ]
+    },
+    {
+      "artifact_id": "client_trade_blotter",
+      "name": "Client trade blotter comparison snapshot",
+      "artifact_type": "trade_comparison",
+      "origin": "representative_internal_work_product",
+      "description": "Selected client-order and allocation data used to compare flagged employee trades against client trading activity and blackout rules.",
+      "step_ids": [
+        "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+        "step-05-draft-exception-memo-and-remediation",
+        "step-06-cco-adjudication-and-sanctions-decision"
+      ]
+    },
+    {
+      "artifact_id": "exception_review_memo",
+      "name": "Exception review memo and remediation draft",
+      "artifact_type": "review_output",
+      "origin": "representative_internal_work_product",
+      "description": "Reviewer draft summarizing the facts, likely policy issue, remediation options, training needs, and any disclosure follow-up.",
+      "step_ids": [
+        "step-05-draft-exception-memo-and-remediation",
+        "step-06-cco-adjudication-and-sanctions-decision"
+      ]
+    },
+    {
+      "artifact_id": "violation_and_retention_log",
+      "name": "Violation, sanction, and retention log",
+      "artifact_type": "books_and_records_bundle",
+      "origin": "representative_internal_work_product",
+      "description": "Final record of violations, waivers, sanctions, remediation, annual certifications, and five-year retention metadata.",
+      "step_ids": [
+        "step-06-cco-adjudication-and-sanctions-decision",
+        "step-07-archive-decisions-certifications-and-follow-ups"
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "step_id": "step-01-assemble-review-packet",
+      "step_order": 1,
+      "step_name": "Assemble the code-of-ethics review packet",
+      "step_description": "Collect the access-person roster, broker-feed coverage, report package, and acknowledgment log into one normalized packet before exception scoring begins.",
+      "human_owner_role": "Compliance operations analyst",
+      "artifact_ids": [
+        "access_person_roster",
+        "brokerage_feed_map",
+        "trade_report_package",
+        "code_acknowledgment_log"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_exam_priorities_2026"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 82,
+          "rationale": "Packet assembly is recurring, checklist-driven work that can normalize the same record types each cycle."
+        },
+        "human_signoff_need": {
+          "value": 30,
+          "rationale": "A reviewer should inspect gaps, but this intake step does not decide whether conduct violated the code."
+        },
+        "liability_asymmetry": {
+          "value": 30,
+          "rationale": "An incomplete packet creates rework and downstream review risk, but it is still an early-stage control rather than the final disciplinary call."
+        },
+        "evidence_strength": {
+          "value": 86,
+          "rationale": "The input set is directly anchored to rule-level reporting, acknowledgment, and recordkeeping obligations."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "Rule 204A-1 and the recordkeeping amendments require advisers to collect and review access-person reports and acknowledgments, which supports a standardized intake packet.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "SEC staff observed stronger programs where duplicate confirms, brokerage statements, and centralized monitoring were already pulled into one compliance process.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "Exams cited missing review evidence and missing acknowledgments, so packet completeness reduces the risk of missing required follow-up later in the cycle.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_exam_priorities_2026",
+          "claim": "Current examinations still test whether compliance programs are implemented and enforced, which favors a documented intake control even though the packet owner is not the final decision-maker.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build a repeatable intake rail that assembles one review packet and exposes missing inputs before any human exception analysis starts."
+    },
+    {
+      "step_id": "step-02-confirm-access-person-scope",
+      "step_order": 2,
+      "step_name": "Confirm access-person scope and reporting obligations",
+      "step_description": "Review the role matrix, related entities, and account coverage to confirm who is an access person, which accounts are reportable, and which cases need explicit reviewer judgment.",
+      "human_owner_role": "Deputy chief compliance officer",
+      "artifact_ids": [
+        "access_person_roster"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_ia_compliance_topics_2017",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_exam_priorities_2026"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 58,
+          "rationale": "Core definitions are rule-based, but edge cases depend on firm structure, role design, and access to recommendations or nonpublic information."
+        },
+        "human_signoff_need": {
+          "value": 66,
+          "rationale": "Someone accountable for the code should confirm edge-role classification because misclassifying access persons creates surveillance blind spots."
+        },
+        "liability_asymmetry": {
+          "value": 63,
+          "rationale": "If the wrong people are scoped out, required reports and preclearance obligations can be missed for an extended period."
+        },
+        "evidence_strength": {
+          "value": 84,
+          "rationale": "The rule text and exam findings provide clear anchors for who should be supervised and why this control matters."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "EXAMS observed advisers that failed to identify and supervise certain employees as access persons, making classification accuracy a real compliance risk.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "The adopting release ties access-person status to access to client recommendations, holdings, and other nonpublic information, which makes named reviewer judgment important for borderline roles.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "claim": "The SEC highlighted failures to identify all access persons as a frequent code-of-ethics exam issue, reinforcing the downside of over-automating edge classifications.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_exam_priorities_2026",
+          "claim": "Current exam priorities still focus on whether policies are actually tailored to the adviser’s operations, which means a tool can structure the decision but should not silently decide every borderline case.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build a reviewer-visible access-person classifier that flags edge cases and records the basis for inclusion or exclusion instead of making hidden scope decisions."
+    },
+    {
+      "step_id": "step-03-reconcile-missing-and-late-reports",
+      "step_order": 3,
+      "step_name": "Reconcile missing, late, and incomplete reports",
+      "step_description": "Compare required holdings reports, quarterly trade reports, and acknowledgments against what was actually received and time-stamp each resulting exception.",
+      "human_owner_role": "Compliance analyst",
+      "artifact_ids": [
+        "brokerage_feed_map",
+        "trade_report_package",
+        "code_acknowledgment_log",
+        "exception_queue"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_ia_compliance_topics_2017",
+        "sec_code_of_ethics_risk_alert_2022"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 86,
+          "rationale": "This is rule-driven exception detection against known due dates, required report types, and acknowledgment requirements."
+        },
+        "human_signoff_need": {
+          "value": 35,
+          "rationale": "A human should review escalated exceptions, but the matching of expected versus received reports is mostly mechanical."
+        },
+        "liability_asymmetry": {
+          "value": 38,
+          "rationale": "Missing a report exception matters, but the resulting issue can still be checked and corrected before discipline or disclosure decisions are made."
+        },
+        "evidence_strength": {
+          "value": 88,
+          "rationale": "The timing, content, and review obligations are explicitly described in rule and exam materials."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "Rule 204A-1 requires periodic holdings and transaction reporting plus adviser review, which creates a clean expected-versus-received exception check.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "SEC staff observed effective programs using duplicate confirms, electronic records, and reviewer controls such as not permitting the reviewer to self-review, which supports automated exception detection with human escalation.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need"
+          ]
+        },
+        {
+          "source_id": "sec_ia_compliance_topics_2017",
+          "claim": "Untimely, missing, or unreviewed access-person reports were highlighted as common exam deficiencies, so catching them early has clear supervisory value.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "EXAMS cited late submissions and lack of evidence of supervisory review, which means an automated exception queue directly addresses a recurring deficiency pattern.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build a rules-driven exception engine for late reports, missing acknowledgments, and incomplete content before spending effort on a heavier reviewer experience."
+    },
+    {
+      "step_id": "step-04-review-trades-preclearance-and-restricted-list-exceptions",
+      "step_order": 4,
+      "step_name": "Review trades, preclearance, and restricted-list exceptions",
+      "step_description": "Compare flagged employee trades and preclearance requests against restricted lists, blackout controls, and client trading context to decide whether the exception is real and material.",
+      "human_owner_role": "Deputy chief compliance officer",
+      "artifact_ids": [
+        "brokerage_feed_map",
+        "trade_report_package",
+        "restricted_list_register",
+        "preclearance_log",
+        "exception_queue",
+        "client_trade_blotter"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_form_adv_part2_2022"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 56,
+          "rationale": "The system can line up dates, lists, and reported trades, but the significance of a potential conflict still depends on context and supervisory interpretation."
+        },
+        "human_signoff_need": {
+          "value": 72,
+          "rationale": "A named reviewer should determine whether a flagged trade reflects a true code issue, an approved exception, or a harmless mismatch."
+        },
+        "liability_asymmetry": {
+          "value": 74,
+          "rationale": "Misreading a restricted-list or client-conflict exception can lead to overlooked fiduciary issues or unnecessary disciplinary action."
+        },
+        "evidence_strength": {
+          "value": 86,
+          "rationale": "The SEC sources are explicit about preclearance, restricted-list controls, and personal-trading conflict disclosure."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "The adopting release requires pre-approval for IPOs and limited offerings and links personal-trading controls to fiduciary obligations, which makes this review step high consequence.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "SEC staff observed effective programs maintaining current restricted and watch lists, enforcing blackout periods, and comparing preclearance forms to actual trading, which makes the comparison work highly structureable.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "EXAMS observed employees trading restricted securities and missing pre-approval controls, so flagged trades should stay reviewer-visible rather than being auto-cleared.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "human_signoff_need"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part2_2022",
+          "claim": "Form ADV Part 2 requires firms to describe how they address conflicts from adviser and related-person personal trading, which raises the cost of an incorrect reviewer conclusion.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build a reviewer workspace that assembles restricted-list, preclearance, and client-trade context for each flag instead of auto-concluding that every hit is a violation."
+    },
+    {
+      "step_id": "step-05-draft-exception-memo-and-remediation",
+      "step_order": 5,
+      "step_name": "Draft the exception memo and remediation package",
+      "step_description": "Turn the reviewed exceptions into a reviewer-editable memo covering facts, likely policy issue, proposed remediation, training needs, and any disclosure follow-up.",
+      "human_owner_role": "Compliance officer",
+      "artifact_ids": [
+        "restricted_list_register",
+        "preclearance_log",
+        "exception_queue",
+        "client_trade_blotter",
+        "exception_review_memo"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_form_adv_part2_2022"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 52,
+          "rationale": "A tool can draft the packet structure and suggested follow-ups, but the narrative still depends on how the reviewer frames the issue and remediation."
+        },
+        "human_signoff_need": {
+          "value": 68,
+          "rationale": "The memo should remain reviewer-owned because it becomes the bridge between monitoring output and formal supervisory action."
+        },
+        "liability_asymmetry": {
+          "value": 71,
+          "rationale": "A bad memo can understate a real problem, overstate a minor one, or miss a needed disclosure or training response."
+        },
+        "evidence_strength": {
+          "value": 84,
+          "rationale": "The content can be anchored in rule obligations, exam findings, and brochure disclosure requirements."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "The SEC requires records of code violations and actions taken, which makes the memo and remediation packet a structured supervisory output rather than optional narrative.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "Observed effective practices included documented exceptions, sanctions, annual certifications, and training, which gives the memo a consistent structure even when the facts vary.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "The 2022 alert notes that firms modified their codes and procedures after deficiencies were identified, so the remediation package should prepare judgment rather than silently resolve the issue.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_form_adv_part2_2022",
+          "claim": "Because the brochure must accurately describe code-of-ethics and personal-trading conflict controls, the memo should explicitly flag when an exception may require disclosure cleanup or consistency checks.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build reviewer-editable memo drafts and remediation suggestions, but keep conclusions, tone, and any disclosure call fully in human hands."
+    },
+    {
+      "step_id": "step-06-cco-adjudication-and-sanctions-decision",
+      "step_order": 6,
+      "step_name": "CCO adjudication and sanctions decision",
+      "step_description": "The chief compliance officer decides whether the exception is a violation, a documented waiver, or a no-issue event, and assigns any sanction, disclosure, or escalation.",
+      "human_owner_role": "Chief compliance officer",
+      "artifact_ids": [
+        "restricted_list_register",
+        "preclearance_log",
+        "client_trade_blotter",
+        "exception_review_memo",
+        "violation_and_retention_log"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_exam_priorities_2026"
+      ],
+      "hard_human_gate": true,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 24,
+          "rationale": "The system can organize the evidence, but the supervisory judgment about sanctions, waivers, and escalation should not be automated."
+        },
+        "human_signoff_need": {
+          "value": 95,
+          "rationale": "This is the named supervisory decision point for whether the code was violated and what the consequence should be."
+        },
+        "liability_asymmetry": {
+          "value": 91,
+          "rationale": "A wrong call here can create disciplinary, disclosure, and books-and-records harm in both directions."
+        },
+        "evidence_strength": {
+          "value": 86,
+          "rationale": "The SEC materials clearly anchor the need for review, enforcement, and retention even though they do not mechanize the disciplinary judgment itself."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "The adopting release expects the CCO or persons under the CCO’s authority to enforce the code and review access-person reports, which makes final adjudication an accountable human responsibility.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "liability_asymmetry"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "SEC staff observed that reviewers should not self-review and that exceptions and reprimands should be documented, so tooling should package evidence but not replace the decision-maker.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "The 2022 alert cites weak supervisory review and self-review failures, which is a direct reason to keep the final violation call with a named reviewer.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_exam_priorities_2026",
+          "claim": "Current examinations still test whether compliance policies are implemented and enforced, so the final sanctions or waiver decision should remain visibly owned by the accountable human reviewer.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Keep any product surface here limited to evidence packaging, prior-decision context, and audit traceability; do not automate the actual violation or sanctions decision."
+    },
+    {
+      "step_id": "step-07-archive-decisions-certifications-and-follow-ups",
+      "step_order": 7,
+      "step_name": "Archive decisions, certifications, and follow-ups",
+      "step_description": "Store the final decision, update the violation log, queue training or disclosure follow-up, and preserve the records needed for future exams and annual compliance review.",
+      "human_owner_role": "Compliance operations analyst",
+      "artifact_ids": [
+        "access_person_roster",
+        "trade_report_package",
+        "code_acknowledgment_log",
+        "preclearance_log",
+        "violation_and_retention_log"
+      ],
+      "source_ids": [
+        "sec_code_of_ethics_rule_release_2004",
+        "sec_personal_trading_compliance_alert_2008",
+        "sec_code_of_ethics_risk_alert_2022",
+        "sec_exam_priorities_2026"
+      ],
+      "hard_human_gate": false,
+      "dimension_scores": {
+        "automation_fit": {
+          "value": 80,
+          "rationale": "Once a human decision exists, retention, certification reminders, and follow-up task creation are highly structured and repeatable."
+        },
+        "human_signoff_need": {
+          "value": 25,
+          "rationale": "The judgment has already happened; this step is mainly about complete retention and operational follow-through."
+        },
+        "liability_asymmetry": {
+          "value": 30,
+          "rationale": "Bad recordkeeping still matters, but the main disciplinary judgment should already be fixed before archival automation runs."
+        },
+        "evidence_strength": {
+          "value": 82,
+          "rationale": "The SEC sources are clear about keeping records of code violations, acknowledgments, reports, and decisions for later review."
+        }
+      },
+      "evidence_notes": [
+        {
+          "source_id": "sec_code_of_ethics_rule_release_2004",
+          "claim": "The amended recordkeeping rule requires advisers to retain the code, violations and actions taken, written acknowledgments, access-person reports, and waiver decisions, making archival mechanics highly structureable.",
+          "supports_dimensions": [
+            "automation_fit",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_personal_trading_compliance_alert_2008",
+          "claim": "SEC staff observed stronger programs where records, annual certifications, documented exceptions, and electronic analysis history were preserved for later review.",
+          "supports_dimensions": [
+            "automation_fit",
+            "human_signoff_need"
+          ]
+        },
+        {
+          "source_id": "sec_code_of_ethics_risk_alert_2022",
+          "claim": "The 2022 alert cites firms that could not produce evidence of review or acknowledgments, which makes good retention an important control even after the substantive decision is over.",
+          "supports_dimensions": [
+            "liability_asymmetry",
+            "evidence_strength"
+          ]
+        },
+        {
+          "source_id": "sec_exam_priorities_2026",
+          "claim": "Because examinations continue to assess whether compliance programs are implemented and whether annual reviews are effective, post-decision records should be easy to retrieve and trace.",
+          "supports_dimensions": [
+            "human_signoff_need",
+            "evidence_strength"
+          ]
+        }
+      ],
+      "unknowns": [],
+      "build_implication": "Build retention, certification, and follow-up automation after the human decision is logged so the supervisory record is exam-ready without adding new judgment risk."
+    }
+  ]
+}

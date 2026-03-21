@@ -10,6 +10,10 @@ from pipeline.publish_ria_annual_adv_update import (
     build_payload as build_second_payload,
     publish as publish_second,
 )
+from pipeline.publish_ria_code_of_ethics_exception_review import (
+    build_payload as build_third_payload,
+    publish as publish_third,
+)
 
 
 class FirstSlicePublishTests(unittest.TestCase):
@@ -150,6 +154,70 @@ class SecondWorkflowPublishTests(unittest.TestCase):
             written = json.loads(output_path.read_text(encoding="utf-8"))
             self.assertEqual(written["artifact_id"], "ria_annual_adv_update_surface_map")
             self.assertEqual(written["generated_by"], "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_annual_adv_update")
+            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 80)
+            self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
+            for step in written["step_results"]:
+                self.assertEqual(step["review"]["missing_dimensions"], [])
+                self.assertGreaterEqual(step["review"]["source_count"], 3)
+                self.assertEqual(step["review"]["unknown_count"], 0)
+            for queue_item in written["trust_summary"]["review_queue"]:
+                self.assertNotEqual(queue_item["action"], "No immediate action required.")
+
+
+class ThirdWorkflowPublishTests(unittest.TestCase):
+    def test_third_workflow_uses_all_three_modes_and_stays_within_scope(self) -> None:
+        payload = build_third_payload()
+        self.assertEqual(payload["workflow"]["workflow_id"], "ria-code-of-ethics-exception-review")
+        self.assertEqual(
+            payload["summary"]["mode_counts"],
+            {"automate": 3, "assist": 3, "keep-human": 1},
+        )
+        self.assertIn("monitoring rails", payload["summary"]["first_build_wedge"])
+
+    def test_access_person_scope_step_uses_recent_exam_source_and_stays_assist(self) -> None:
+        payload = build_third_payload()
+        scope_step = next(
+            item
+            for item in payload["step_results"]
+            if item["step_id"] == "step-02-confirm-access-person-scope"
+        )
+        self.assertEqual(scope_step["recommendation"], "assist")
+        self.assertGreaterEqual(scope_step["review"]["trust_score"], 80)
+        self.assertIn(
+            "sec_code_of_ethics_risk_alert_2022",
+            {note["source_id"] for note in scope_step["evidence_notes"]},
+        )
+
+    def test_cco_adjudication_step_stays_human_with_rule_release_support(self) -> None:
+        payload = build_third_payload()
+        adjudication_step = next(
+            item
+            for item in payload["step_results"]
+            if item["step_id"] == "step-06-cco-adjudication-and-sanctions-decision"
+        )
+        self.assertEqual(adjudication_step["recommendation"], "keep-human")
+        self.assertTrue(adjudication_step["hard_human_gate"])
+        self.assertGreaterEqual(adjudication_step["review"]["trust_score"], 80)
+        self.assertIn(
+            "sec_code_of_ethics_rule_release_2004",
+            {note["source_id"] for note in adjudication_step["evidence_notes"]},
+        )
+        self.assertIn(
+            "approval support",
+            adjudication_step["review"]["review_actions"][-1],
+        )
+
+    def test_third_workflow_publish_writes_expected_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "surface_map_third.json"
+            payload = publish_third(output_path=output_path)
+            self.assertTrue(output_path.exists())
+            written = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(written["artifact_id"], "ria_code_of_ethics_exception_review_surface_map")
+            self.assertEqual(
+                written["generated_by"],
+                "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish_ria_code_of_ethics_exception_review",
+            )
             self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 80)
             self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
             for step in written["step_results"]:
