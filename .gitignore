@@ -16,4 +16,6 @@ coverage/
 *.db
 data/raw/
 data/snapshots/
-artifacts/
+artifacts/*
+!artifacts/README.md
+!artifacts/ria_marketing_rule_review.surface_map.json

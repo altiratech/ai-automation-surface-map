@@ -14,7 +14,11 @@ The founding loop is:
 
 ## Current Repo Status
 
-This repo is a fresh scaffold for the internal tool lane.
+This repo now includes the first locked slice:
+- one RIA marketing-rule review workflow
+- one explicit step and artifact model
+- one inspectable Python scoring pipeline
+- one published rationale-backed surface-map payload
 
 ## Canonical Build Truth
 
@@ -47,3 +51,20 @@ Treat these docs as authoritative:
 
 Do not force this into a broad standalone SaaS story.
 Build it as a precise internal decision engine around one workflow at a time.
+
+## First Slice Commands
+
+Generate the local artifact payload:
+
+```bash
+/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish
+```
+
+Run the local verification suite:
+
+```bash
+/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m unittest discover -s tests
+```
+
+Published artifact:
+- `artifacts/ria_marketing_rule_review.surface_map.json`
