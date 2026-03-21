@@ -88,5 +88,6 @@ NPM_CONFIG_CACHE=/tmp/npm-cache npm run dev
 ```
 
 Current note:
-- `apps/web` remains a read-only viewer over the marketing-review artifact only.
+- `apps/web` now exposes both locked artifacts read-only.
+- The detailed drill-in remains intentionally locked to the marketing-review workflow.
 - This repo still does not support multi-workflow switching or orchestration in the UI.
