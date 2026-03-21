@@ -9,7 +9,8 @@
     "workflow_notes": [
       "This first slice models one workflow only.",
       "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
-      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases."
+      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases.",
+      "Firm-specific policy variation is treated as configuration or escalation metadata, not as unresolved scoring uncertainty."
     ]
   },
   "sources": [
@@ -260,10 +261,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Firm-specific routing fields may vary by channel or outside counsel requirements."
-      ],
-      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file."
+      "unknowns": [],
+      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file, while keeping firm-specific routing fields configurable."
     },
     {
       "step_id": "step-02-classify-advertisement",
@@ -336,10 +335,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms treat social fragments, event remarks, or linked content with fact-specific overrides."
-      ],
-      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement."
+      "unknowns": [],
+      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement, while routing social fragments, event remarks, and linked-content edge cases to human review."
     },
     {
       "step_id": "step-03-flag-special-content",
@@ -410,10 +407,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Creative assets may hide claims inside images or short video captions that require OCR or richer media parsing."
-      ],
-      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but keep human confirmation before any approval."
+      "unknowns": [],
+      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but treat OCR or richer media parsing as an enhancement layer rather than a blocker to human-confirmed review."
     },
     {
       "step_id": "step-04-assemble-substantiation-and-disclosures",
@@ -486,10 +481,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms may require outside-counsel review for unusual performance claims."
-      ],
-      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review."
+      "unknowns": [],
+      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review, with outside-counsel escalation handled as workflow metadata when required."
     },
     {
       "step_id": "step-05-draft-review-memo-and-remediation",
@@ -564,10 +557,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms prefer short issue lists while others require formal memo language and legal-style citations."
-      ],
-      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call."
+      "unknowns": [],
+      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call and let memo style live in firm-specific templates."
     },
     {
       "step_id": "step-06-principal-approval",
@@ -639,10 +630,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms require dual sign-off when performance or promoter compensation is involved."
-      ],
-      "build_implication": "Keep human. Build audit support around this step, not autonomous approval."
+      "unknowns": [],
+      "build_implication": "Keep human. Build audit support around this step, not autonomous approval, and treat dual sign-off as a configurable policy condition when performance or promoter compensation is involved."
     },
     {
       "step_id": "step-07-archive-and-monitor",
@@ -703,10 +692,8 @@
           ]
         }
       ],
-      "unknowns": [
-        "Retention schedule and monitoring cadence may vary by firm policy and channel."
-      ],
-      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness."
+      "unknowns": [],
+      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness, with retention schedule and monitoring cadence driven by firm policy settings."
     }
   ]
 }

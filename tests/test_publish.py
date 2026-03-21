@@ -32,6 +32,7 @@ class FirstSlicePublishTests(unittest.TestCase):
         for step in payload["step_results"]:
             self.assertEqual(step["review"]["missing_dimensions"], [])
             self.assertGreaterEqual(step["review"]["source_count"], 3)
+            self.assertEqual(step["review"]["unknown_count"], 0)
 
     def test_step_five_uses_latest_sec_faq_and_retains_assist_posture(self) -> None:
         payload = build_payload()
@@ -85,11 +86,13 @@ class FirstSlicePublishTests(unittest.TestCase):
             self.assertEqual(written["summary"]["mode_counts"]["keep-human"], 1)
             self.assertEqual(payload["build_decisions"][-1]["decision_type"], "enforce-human-gate")
             self.assertIn("workflow_trust_score", written["trust_summary"])
-            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 80)
+            self.assertGreaterEqual(written["trust_summary"]["workflow_trust_score"], 82)
             self.assertIn(
                 written["trust_summary"]["weakest_step"]["step_id"],
                 {item["step_id"] for item in written["step_results"]},
             )
+            for queue_item in written["trust_summary"]["review_queue"]:
+                self.assertNotEqual(queue_item["action"], "No immediate action required.")
 
 
 if __name__ == "__main__":

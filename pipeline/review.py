@@ -189,13 +189,17 @@ def review_workflow(
         workflow_trust_score >= config.review_thresholds["min_workflow_trust_score_for_read_only_ui"]
         and not blocking_items
     )
+    actionable_reviews = [
+        review for review in sorted(step_reviews.values(), key=lambda item: item.trust_score) if review.review_actions
+    ]
+    review_queue_source = actionable_reviews or sorted(step_reviews.values(), key=lambda item: item.trust_score)
     review_queue = tuple(
         {
             "step_id": review.step_id,
             "priority": "high" if review.trust_score == weakest_step.trust_score else "medium",
             "action": review.review_actions[0] if review.review_actions else "No immediate action required.",
         }
-        for review in sorted(step_reviews.values(), key=lambda item: item.trust_score)[:3]
+        for review in review_queue_source[:3]
     )
 
     summary = WorkflowTrustSummary(

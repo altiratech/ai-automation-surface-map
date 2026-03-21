@@ -1,7 +1,7 @@
 {
   "artifact_id": "ria_marketing_rule_review_surface_map",
   "artifact_version": "1.0",
-  "generated_at": "2026-03-21T08:38:56Z",
+  "generated_at": "2026-03-21T08:42:21Z",
   "generated_by": "/Users/ryanjameson/Desktop/Lifehub/.venv-fastlane/bin/python -m pipeline.publish",
   "workflow": {
     "workflow_id": "ria-marketing-rule-review",
@@ -13,7 +13,8 @@
     "workflow_notes": [
       "This first slice models one workflow only.",
       "Representative internal artifacts are included as workflow inputs, not as fabricated evidence.",
-      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases."
+      "Source evidence is limited to cited SEC guidance, staff guidance, risk alerts, examination priorities, and enforcement releases.",
+      "Firm-specific policy variation is treated as configuration or escalation metadata, not as unresolved scoring uncertainty."
     ]
   },
   "observed_inputs": {
@@ -275,28 +276,23 @@
     "blocked_pattern": "Do not ship autonomous end-to-end approval or publication for this workflow in slice 1."
   },
   "trust_summary": {
-    "workflow_trust_score": 81,
+    "workflow_trust_score": 82,
     "workflow_trust_grade": "B",
     "read_only_ui_ready": true,
     "weakest_step": {
       "step_id": "step-01-intake-package",
-      "trust_score": 80
+      "trust_score": 81
     },
     "review_queue": [
       {
-        "step_id": "step-01-intake-package",
+        "step_id": "step-05-draft-review-memo-and-remediation",
         "priority": "high",
-        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
+        "action": "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
       },
       {
-        "step_id": "step-02-classify-advertisement",
-        "priority": "high",
-        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
-      },
-      {
-        "step_id": "step-03-flag-special-content",
-        "priority": "high",
-        "action": "Resolve the listed unknowns before turning this step into stronger product logic."
+        "step_id": "step-06-principal-approval",
+        "priority": "medium",
+        "action": "Keep any future UI limited to approval support and audit traceability, not autonomous action."
       }
     ],
     "blocking_items": []
@@ -393,12 +389,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Firm-specific routing fields may vary by channel or outside counsel requirements."
-      ],
-      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file.",
+      "unknowns": [],
+      "build_implication": "Good automate candidate: normalize intake and create a review-ready bundle before a human reviewer opens the file, while keeping firm-specific routing fields configurable.",
       "review": {
-        "trust_score": 80,
+        "trust_score": 81,
         "trust_grade": "B",
         "source_count": 3,
         "evidence_note_count": 3,
@@ -410,7 +404,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.54,
@@ -423,9 +417,7 @@
           "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
           "confidence_note": "Clear score separation supports the current recommendation."
         },
-        "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic."
-        ]
+        "review_actions": []
       }
     },
     {
@@ -527,12 +519,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms treat social fragments, event remarks, or linked content with fact-specific overrides."
-      ],
-      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement.",
+      "unknowns": [],
+      "build_implication": "Best handled as an assistive classifier that shows why the item likely is or is not an advertisement, while routing social fragments, event remarks, and linked-content edge cases to human review.",
       "review": {
-        "trust_score": 80,
+        "trust_score": 81,
         "trust_grade": "B",
         "source_count": 4,
         "evidence_note_count": 4,
@@ -544,7 +534,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.47,
@@ -557,9 +547,7 @@
           "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
           "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
-        "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic."
-        ]
+        "review_actions": []
       }
     },
     {
@@ -663,12 +651,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Creative assets may hide claims inside images or short video captions that require OCR or richer media parsing."
-      ],
-      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but keep human confirmation before any approval.",
+      "unknowns": [],
+      "build_implication": "Strong assist candidate: automate red-flag detection and disclosure reminders, but treat OCR or richer media parsing as an enhancement layer rather than a blocker to human-confirmed review.",
       "review": {
-        "trust_score": 80,
+        "trust_score": 81,
         "trust_grade": "B",
         "source_count": 4,
         "evidence_note_count": 4,
@@ -680,7 +666,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.47,
@@ -693,9 +679,7 @@
           "why_not_automate": "Do not let this step resolve the review on its own; it should prepare judgment, not replace it.",
           "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
-        "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic."
-        ]
+        "review_actions": []
       }
     },
     {
@@ -805,12 +789,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms may require outside-counsel review for unusual performance claims."
-      ],
-      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review.",
+      "unknowns": [],
+      "build_implication": "High-value automate wedge: package substantiation evidence and disclosure support before human review, with outside-counsel escalation handled as workflow metadata when required.",
       "review": {
-        "trust_score": 82,
+        "trust_score": 83,
         "trust_grade": "B",
         "source_count": 4,
         "evidence_note_count": 4,
@@ -822,7 +804,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.52,
@@ -835,9 +817,7 @@
           "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
           "confidence_note": "Clear score separation supports the current recommendation."
         },
-        "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic."
-        ]
+        "review_actions": []
       }
     },
     {
@@ -953,12 +933,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms prefer short issue lists while others require formal memo language and legal-style citations."
-      ],
-      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call.",
+      "unknowns": [],
+      "build_implication": "Assist candidate: draft issue lists, redline suggestions, and remediation checklists, but keep humans in charge of the actual judgment call and let memo style live in firm-specific templates.",
       "review": {
-        "trust_score": 80,
+        "trust_score": 81,
         "trust_grade": "B",
         "source_count": 4,
         "evidence_note_count": 4,
@@ -970,7 +948,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.45,
@@ -984,7 +962,6 @@
           "confidence_note": "Moderate score separation supports the recommendation, but the second-best mode remains plausible."
         },
         "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic.",
           "Keep reviewer confirmation prominent because the downside of a bad recommendation is still high."
         ]
       }
@@ -1087,12 +1064,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Some firms require dual sign-off when performance or promoter compensation is involved."
-      ],
-      "build_implication": "Keep human. Build audit support around this step, not autonomous approval.",
+      "unknowns": [],
+      "build_implication": "Keep human. Build audit support around this step, not autonomous approval, and treat dual sign-off as a configurable policy condition when performance or promoter compensation is involved.",
       "review": {
-        "trust_score": 81,
+        "trust_score": 82,
         "trust_grade": "B",
         "source_count": 4,
         "evidence_note_count": 4,
@@ -1104,7 +1079,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.48,
@@ -1118,7 +1093,6 @@
           "confidence_note": "Clear score separation supports the current recommendation."
         },
         "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic.",
           "Keep any future UI limited to approval support and audit traceability, not autonomous action."
         ]
       }
@@ -1209,12 +1183,10 @@
           ]
         }
       ],
-      "unknowns": [
-        "Retention schedule and monitoring cadence may vary by firm policy and channel."
-      ],
-      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness.",
+      "unknowns": [],
+      "build_implication": "Strong automate candidate because it is structured, repetitive, and directly improves exam readiness, with retention schedule and monitoring cadence driven by firm policy settings.",
       "review": {
-        "trust_score": 81,
+        "trust_score": 82,
         "trust_grade": "B",
         "source_count": 3,
         "evidence_note_count": 3,
@@ -1226,7 +1198,7 @@
           "liability_asymmetry"
         ],
         "missing_dimensions": [],
-        "unknown_count": 1,
+        "unknown_count": 0,
         "read_only_ui_ready": true,
         "confidence_breakdown": {
           "confidence": 0.55,
@@ -1239,9 +1211,7 @@
           "why_not_more_human": "Human review should stay focused on exceptions, not default packet handling.",
           "confidence_note": "Clear score separation supports the current recommendation."
         },
-        "review_actions": [
-          "Resolve the listed unknowns before turning this step into stronger product logic."
-        ]
+        "review_actions": []
       }
     }
   ],
