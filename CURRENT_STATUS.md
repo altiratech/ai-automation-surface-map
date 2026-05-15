@@ -5,6 +5,7 @@ Product: internal workflow-mapping tool for deciding what to automate, assist, o
 Current state:
 - No shared workspace handoff is maintained here by default.
 - Treat the repo docs as the current source of truth.
+- First local slices are implemented for workflow scoring, artifact generation, pattern summary, assist-lane workbench, and the React viewer.
 
 Working bias:
 - Keep the first loop narrow: select one workflow, map steps, score each step, and show product or agent priorities.

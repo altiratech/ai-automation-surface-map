@@ -7,7 +7,7 @@ Status: canonical current-scope document
 - Project name: AI Automation Surface Map
 - Owner: Ryan Jameson
 - Date opened: 2026-03-20
-- Status: scaffolded
+- Status: active internal prototype with first local workflow-scoring slices implemented
 
 ## 2. One-Sentence Product Definition
 
